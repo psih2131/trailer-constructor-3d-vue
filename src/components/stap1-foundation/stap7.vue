@@ -1,0 +1,111 @@
+<template>
+    <div class="body-main-data__wrapper">
+
+        <modelViewer :urlModel="currentModel" />
+
+        <div class="trailer-size">
+
+            <template v-for="(item,index) in sizeList">
+                <div class="trailer-size__element trailer-size__element--33 trailer-size__element--subtitle" 
+                :class="{'active':index == activeIndex}"
+                @click="selectCurrentSize(item,index)"
+                data-model="@/assets/models-3d/7x12_Square_Trailer.glb">
+                
+                    <p class="trailer-size__element-title">{{ item.size }}</p>
+                    <p class="trailer-size__element-subtitle">{{ item.subtitle }}</p>
+                    <p class="trailer-size__element-cost">{{ item.cost }}</p>
+
+                </div>
+
+                
+            </template>
+
+            <div class="trailer-size__element-inform">
+                <div class="trailer-size__element-inform-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12.8843 2.53152C12.5383 1.87752 11.4623 1.87752 11.1163 2.53152L2.11627 19.5315C2.03556 19.6839 1.99564 19.8546 2.00038 20.027C2.00512 20.1994 2.05437 20.3676 2.14333 20.5154C2.2323 20.6631 2.35796 20.7853 2.50812 20.8702C2.65827 20.955 2.82781 20.9996 3.00027 20.9995H21.0003C21.1727 20.9999 21.3423 20.9555 21.4925 20.8708C21.6428 20.7861 21.7685 20.6639 21.8574 20.5162C21.9463 20.3684 21.9955 20.2002 22 20.0278C22.0045 19.8554 21.9643 19.6847 21.8833 19.5325L12.8843 2.53152ZM13.0003 17.9995H11.0003V15.9995H13.0003V17.9995ZM11.0003 13.9995V8.99952H13.0003L13.0013 13.9995H11.0003Z" fill="#856404"/>
+                    </svg>
+                </div>
+                <div class="trailer-size__element-inform-data">
+                    <p class="trailer-size__element-inform-title">Engineering Note:</p>
+                    <p class="trailer-size__element-inform-text">Final axle configuration may be upgraded based on our engineering analysis of your specific trailer size, weight distribution, and equipment layout. We'll contact you if changes are needed for safety and legal compliance.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</template>
+
+<script setup >
+
+  import { ref, onMounted, onBeforeUnmount, computed, watch , defineEmits } from 'vue'
+
+  import modelViewer from '@/components/model-view.vue'
+
+  import trailerModel_7x12 from '@/assets/models/models-3d/7x12_Square_Trailer.glb?url';
+
+  import trailerModel_7x14 from '@/assets/models/models-3d/7x14_Square_Trailer.glb?url';
+
+  import trailerModel_7x16 from '@/assets/models/models-3d/7x16_Square_Trailer.glb?url';
+
+  import trailerModel_7x18 from '@/assets/models/models-3d/7x18_Square_Trailer.glb?url';
+
+  import trailerModel_7x20 from '@/assets/models/models-3d/7x20_Square_Trailer.glb?url';
+
+  import trailerModel_7x22 from '@/assets/models/models-3d/7x22_Square_Trailer.glb?url';
+
+
+
+  const activeIndex = ref(0)
+
+  const sizeList = ref([
+    {
+        "size":"Standard Tandem Axles",
+        "subtitle": "5200lb axles for standard trailers",
+        "model": trailerModel_7x12,
+        "cost": "Standard"
+    },
+    {
+        "size":"Upgrade to 7000lb Tandem Axles",
+        "subtitle": "For medium-duty loads and equipment",
+        "model": trailerModel_7x14,
+        "cost": "+$800"
+    },
+    
+    {
+        "size":"Upgrade to 10000lb Tandem Axles",
+        "subtitle": "For heavy-duty equipment and supplies",
+        "model": trailerModel_7x16,
+        "cost": "+$1,600"
+    },
+    
+    {
+        "size":"Triple 5200lb Axles",
+        "subtitle": "For extreme loads and large trailers",
+        "model": trailerModel_7x12,
+        "cost": "+$3,000"
+    },
+    {
+        "size":"Triple 7000lb Axles",
+        "subtitle": "Maximum capacity for oversized trailers",
+        "model": trailerModel_7x14,
+        "cost": "+$4,500"
+    },
+    
+    {
+        "size":"Triple 10000lb Axles",
+        "subtitle": "For commercial-grade trailers",
+        "model": trailerModel_7x16,
+        "cost": "+$6,000"
+    }, 
+  ])
+
+  const currentModel = ref(sizeList.value[0].model)
+
+  const selectCurrentSize = (item, index)=>{
+    activeIndex.value = index
+    currentModel.value = item.model
+    console.log(currentModel.value)
+  }
+
+</script>
