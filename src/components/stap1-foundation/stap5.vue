@@ -1,5 +1,5 @@
 <template>
-    <div class="body-main-data__wrapper">
+    <div class="body-main-data__wrapper" v-if="store.dataServer.foundation?.stap_5?.length >0">
 
         <modelViewer :urlModel="currentModel" />
 
@@ -11,7 +11,7 @@
                 @click="selectCurrentSize(item,index)"
                 data-model="@/assets/models-3d/7x12_Square_Trailer.glb">
                 
-                    {{ item.size }}
+                    {{ item.title_value }}
 
                 </div>
             </template>
@@ -23,48 +23,53 @@
 
 <script setup >
 
-  import { ref, onMounted, onBeforeUnmount, computed, watch , defineEmits } from 'vue'
+import { useCounterStore } from '@/stores/counter'
 
-  import modelViewer from '@/components/model-view.vue'
+import { ref, onMounted, onBeforeUnmount, computed, watch , defineEmits } from 'vue'
 
-  import trailerModel_7x12 from '@/assets/models/models-3d/7x12_Square_Trailer.glb?url';
+import modelViewer from '@/components/model-view.vue'
 
-  import trailerModel_7x14 from '@/assets/models/models-3d/7x14_Square_Trailer.glb?url';
-
-  import trailerModel_7x16 from '@/assets/models/models-3d/7x16_Square_Trailer.glb?url';
-
-  import trailerModel_7x18 from '@/assets/models/models-3d/7x18_Square_Trailer.glb?url';
-
-  import trailerModel_7x20 from '@/assets/models/models-3d/7x20_Square_Trailer.glb?url';
-
-  import trailerModel_7x22 from '@/assets/models/models-3d/7x22_Square_Trailer.glb?url';
+import trailerModel_7x12 from '@/assets/models/models-3d/7x12_Square_Trailer.glb?url';
 
 
+//DATA
+const store = useCounterStore()
 
-  const activeIndex = ref(0)
+const activeIndex = ref(null)
 
-  const sizeList = ref([
-    {
-        "size":"7 feet (Standart)",
-        "model": trailerModel_7x12
-    },
-    {
-        "size":"7’6’’ (Tall)",
-        "model": trailerModel_7x14
-    },
+const sizeList = ref(null)
+
+const currentModel = ref(null)
+
+//METHODS
+const selectCurrentSize = (item, index)=>{
+activeIndex.value = index
+
+if(item.model?.url){
+currentModel.value = item.model.url
+}
+else{
+currentModel.value = trailerModel_7x12
+}
+
+console.log(currentModel.value)
+}
+
+
+//HOOKS
+onMounted(()=>{
+
+    sizeList.value = store.dataServer.foundation.stap_5
+
+    activeIndex.value = 0
     
-    {
-        "size":"8’ (Extra Tall)",
-        "model": trailerModel_7x16
-    }, 
-  ])
-
-  const currentModel = ref(sizeList.value[0].model)
-
-  const selectCurrentSize = (item, index)=>{
-    activeIndex.value = index
-    currentModel.value = item.model
-    console.log(currentModel.value)
-  }
+    if(sizeList.value[0].model?.url){
+        currentModel.value = sizeList.value[0].model.url
+    }
+    else{
+        currentModel.value = trailerModel_7x12
+    }
+    
+})
 
 </script>

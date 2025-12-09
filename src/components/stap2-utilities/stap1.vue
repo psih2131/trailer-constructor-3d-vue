@@ -1,5 +1,5 @@
 <template>
-    <div class="body-main-data__wrapper">
+    <div class="body-main-data__wrapper" v-if="store.dataServer.utilities?.stap_1?.length >0">
 
         <modelViewer :urlModel="currentModel" />
 
@@ -21,15 +21,14 @@
                             <svg v-else width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect x="1" y="1" width="16" height="16" rx="2" stroke="#5D3FD3" stroke-width="2"/>
                             </svg>
-
-
+                            
                         </div>
                     </div>
                     
                     <div class="choice-element__data">
-                        <p class="trailer-size__element-title">{{ item.title }}</p>
+                        <p class="trailer-size__element-title">{{ item.title_value }}</p>
                         <p class="trailer-size__element-subtitle">{{ item.subtitle }}</p>
-                        <p class="trailer-size__element-cost">{{ item.cost }}</p>
+                        <p class="trailer-size__element-cost">{{ item.price }}</p>
                     </div>
 
                 </div>
@@ -41,65 +40,59 @@
 
 <script setup >
 
-  import { ref, onMounted, onBeforeUnmount, computed, watch , defineEmits } from 'vue'
+import { useCounterStore } from '@/stores/counter'
 
-  import modelViewer from '@/components/model-view.vue'
+import { ref, onMounted, onBeforeUnmount, computed, watch , defineEmits } from 'vue'
 
-  import trailerModel_7x12 from '@/assets/models/models-3d/7x12_Square_Trailer.glb?url';
+import modelViewer from '@/components/model-view.vue'
 
-  import trailerModel_7x14 from '@/assets/models/models-3d/7x14_Square_Trailer.glb?url';
-
-  import trailerModel_7x16 from '@/assets/models/models-3d/7x16_Square_Trailer.glb?url';
-
-  import trailerModel_7x18 from '@/assets/models/models-3d/7x18_Square_Trailer.glb?url';
-
-  import trailerModel_7x20 from '@/assets/models/models-3d/7x20_Square_Trailer.glb?url';
+import trailerModel_7x12 from '@/assets/models/models-3d/7x12_Square_Trailer.glb?url';
 
 
-  const activeIndex = ref(0)
+//DATA
+const store = useCounterStore()
 
-  const sizeList = ref([
-    {
-        "title":"100 Amp Premium Electrical",
-        "subtitle":"For power-hungry equipment setups",
-        "cost":"+$1,800",
-        "model": trailerModel_7x12,
-        "selected": false,
-    },
-    {
-        "title":"Generator - Honda EU7000is",
-        "subtitle":"7000W inverter, electric start, quiet",
-        "cost":"+$3,500",
-        "model": trailerModel_7x14,
-        "selected": false,
-    },
-    {
-        "title":"Automatic Transfer Switch",
-        "subtitle":"Seamless power switching",
-        "cost":"+$950",
-        "model": trailerModel_7x16,
-        "selected": false,
-    },
-    {
-        "title":"Westinghouse iGen 11kW Inverter Generator",
-        "subtitle":"11,000W, remote start, ultra-quiet operation",
-        "cost":"+$2,200",
-        "model": trailerModel_7x18,
-        "selected": false,
-    },
+const activeIndex = ref(null)
+
+const sizeList = ref(null)
+
+const currentModel = ref(null)
+
+//METHODS
+const selectCurrentSize = (item, index)=>{
+activeIndex.value = index
+
+if(item.model?.url){
+currentModel.value = item.model.url
+}
+else{
+currentModel.value = trailerModel_7x12
+}
+
+console.log(currentModel.value)
+
+sizeList.value[index].selected = !sizeList.value[index].selected
+}
 
 
+//HOOKS
+onMounted(()=>{
+
+    sizeList.value = store.dataServer.utilities.stap_1
+
+    sizeList.value.forEach(item => {
+        item.selected = false
+    })
+
+    activeIndex.value = 0
     
-  ])
-
-  const currentModel = ref(sizeList.value[0].model)
-
-  const selectCurrentSize = (item, index)=>{
-    activeIndex.value = index
-    currentModel.value = item.model
-    console.log(currentModel.value)
-
-    sizeList.value[index].selected = !sizeList.value[index].selected
-  }
+    if(sizeList.value[0].model?.url){
+        currentModel.value = sizeList.value[0].model.url
+    }
+    else{
+        currentModel.value = trailerModel_7x12
+    }
+    
+})
 
 </script>

@@ -3,6 +3,8 @@ import { defineStore } from 'pinia'
 
 export const useCounterStore = defineStore('counter', () => {
 
+  const dataServer = ref<any>(null)
+
   const stapCounter = ref<number>(1)
 
   const foundationCounter = ref<number>(1)
@@ -40,6 +42,11 @@ export const useCounterStore = defineStore('counter', () => {
     getQuoteCounter.value = newValue
   }
 
+  function changeDataServer(newValue: any) {
+    dataServer.value = newValue
+    console.log('dataServer', dataServer.value)
+  }
+
 
   return {
     stapCounter,
@@ -48,6 +55,7 @@ export const useCounterStore = defineStore('counter', () => {
     cookingCounter,
     addOnsCounter,
     getQuoteCounter,
+    dataServer,
 
     changeStapCounter,
     changeFoundationCounter,
@@ -55,5 +63,6 @@ export const useCounterStore = defineStore('counter', () => {
     changeCookingCounter,
     changeAddOnsCounter,
     changeGetQuoteCounter,
+    changeDataServer,
   }
 })

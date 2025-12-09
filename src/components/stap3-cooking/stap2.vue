@@ -1,5 +1,5 @@
 <template>
-    <div class="body-main-data__wrapper">
+    <div class="body-main-data__wrapper" v-if="store.dataServer.equipment?.stap_2?.length >0">
 
         <modelViewer :urlModel="currentModel" />
 
@@ -27,9 +27,9 @@
                     </div>
                     
                     <div class="choice-element__data">
-                        <p class="trailer-size__element-title">{{ item.title }}</p>
+                        <p class="trailer-size__element-title">{{ item.title_value }}</p>
                         <p class="trailer-size__element-subtitle">{{ item.subtitle }}</p>
-                        <p class="trailer-size__element-cost">{{ item.cost }}</p>
+                        <p class="trailer-size__element-cost">{{ item.price }}</p>
                     </div>
 
                 </div>
@@ -40,96 +40,58 @@
 </template>
 
 <script setup >
+ import { useCounterStore } from '@/stores/counter'
 
-  import { ref, onMounted, onBeforeUnmount, computed, watch , defineEmits } from 'vue'
+import { ref, onMounted, onBeforeUnmount, computed, watch , defineEmits } from 'vue'
 
-  import modelViewer from '@/components/model-view.vue'
+import modelViewer from '@/components/model-view.vue'
 
-  import trailerModel_7x12 from '@/assets/models/models-3d/7x12_Square_Trailer.glb?url';
-
-  import trailerModel_7x14 from '@/assets/models/models-3d/7x14_Square_Trailer.glb?url';
-
-  import trailerModel_7x16 from '@/assets/models/models-3d/7x16_Square_Trailer.glb?url';
-
-  import trailerModel_7x18 from '@/assets/models/models-3d/7x18_Square_Trailer.glb?url';
-
-  import trailerModel_7x20 from '@/assets/models/models-3d/7x20_Square_Trailer.glb?url';
+import trailerModel_7x12 from '@/assets/models/models-3d/7x12_Square_Trailer.glb?url';
 
 
-  const activeIndex = ref(0)
+//DATA
+const store = useCounterStore()
 
-  const sizeList = ref([
-    {
-        "title":'Hood Ventilation System - 4 ft',
-        "subtitle":'Compact solution, 140,000 BTU total output',
-        "cost":'+$1,450',
-        "model": trailerModel_7x12,
-        "selected": false,
-    },
+const activeIndex = ref(null)
 
-    {
-        "title":'36" Gas Range (6-Burner)',
-        "subtitle":'Commercial grade, 210,000 BTU total output',
-        "cost":'+$1,850',
-        "model": trailerModel_7x12,
-        "selected": false,
-    },
+const sizeList = ref(null)
 
-    {
-        "title":'48" Gas Range (8-Burner)',
-        "subtitle":'High-capacity cooking, 280,000 BTU output',
-        "cost":'+$2,450',
-        "model": trailerModel_7x12,
-        "selected": false,
-    },
+const currentModel = ref(null)
 
-    {
-        "title":'Single Deck Convection Oven',
-        "subtitle":'Compact baking solution, 22" deep cavity',
-        "cost":'+$1,200',
-        "model": trailerModel_7x12,
-        "selected": false,
-    },
+//METHODS
+const selectCurrentSize = (item, index)=>{
+activeIndex.value = index
 
-    {
-        "title":'Double Deck Convection Oven',
-        "subtitle":'High-capacity baking, 24" deep cavities',
-        "cost":'+$2,100',
-        "model": trailerModel_7x12,
-        "selected": false,
-    },
+if(item.model?.url){
+currentModel.value = item.model.url
+}
+else{
+currentModel.value = trailerModel_7x12
+}
 
-    {
-        "title":'Range with Convection Oven',
-        "subtitle":'6-burner range with full-size oven below',
-        "cost":'+$2,200',
-        "model": trailerModel_7x12,
-        "selected": false,
-    },
+console.log(currentModel.value)
 
-    {
-        "title":'24" Manual Griddle',
-        "subtitle":'60,000 BTU, 3/4" plate, compact solution',
-        "cost":'+$650',
-        "model": trailerModel_7x12,
-        "selected": false,
-    },
+sizeList.value[index].selected = !sizeList.value[index].selected
+}
 
 
+//HOOKS
+onMounted(()=>{
 
+    sizeList.value = store.dataServer.equipment.stap_2
 
+    sizeList.value.forEach(item => {
+        item.selected = false
+    })
 
+    activeIndex.value = 0
     
-  ])
-
-  const currentModel = ref(sizeList.value[0].model)
-
-  const selectCurrentSize = (item, index)=>{
-    activeIndex.value = index
-    // currentModel.value = item.model
-    // console.log(currentModel.value)
-
-    sizeList.value[index].selected = !sizeList.value[index].selected
-  }
-
+    if(sizeList.value[0].model?.url){
+        currentModel.value = sizeList.value[0].model.url
+    }
+    else{
+        currentModel.value = trailerModel_7x12
+    }
+    
+})
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <div class="body-main-data__wrapper">
+    <div class="body-main-data__wrapper" v-if="store.dataServer.foundation?.stap_2?.length >0">
 
         <modelViewer :urlModel="currentModel" />
 
@@ -11,117 +11,51 @@
                 @click="selectCurrentSize(item,index)"
                 data-model="@/assets/models-3d/7x12_Square_Trailer.glb">
                 
-                    {{ item.size }}
+                    {{ item.title_value }}
 
                 </div>
             </template>
-            
-<!-- 
-            <div class="trailer-size__element"
-                data-model="@/assets/models-3d/7x14_Square_Trailer.glb">7’ x 14’</div>   
-            <div class="trailer-size__element"
-                data-model="@/assets/models-3d/7x16_Square_Trailer.glb">7’ x 16’</div>
-            <div class="trailer-size__element"
-                data-model="@/assets/models-3d/7x18_Square_Trailer.glb">7’ x 18’</div>
-            <div class="trailer-size__element"
-                data-model="@/assets/models-3d/7x20_Square_Trailer.glb">7’ x 20’</div>
-            <div class="trailer-size__element"
-                data-model="@/assets/models-3d/7x22_Square_Trailer.glb">7’ x 22’</div>
-
-            <div class="trailer-size__element"
-                data-model="@/assets/models-3d/7x22_Square_Trailer_7ft_porch.glb">7’ x 22’ porch</div>
-
-
-            <div class="trailer-size__element"
-                data-model="@/assets/models-3d/8.5x12_Square_Trailer.glb">8.5’ x 12’</div>
-
-            <div class="trailer-size__element"
-                data-model="@/assets/models-3d/8.5x14_Square_Trailer.glb">8.5’ x 14’</div>
-
-            <div class="trailer-size__element"
-                data-model="@/assets/models-3d/8.5x16_Square_Trailer.glb">8.5’ x 16’</div>
-
-            <div class="trailer-size__element"
-                data-model="@/assets/models-3d/8.5x18_Square_Trailer.glb">8.5’ x 18’</div>
-
-            <div class="trailer-size__element"
-                data-model="@/assets/models-3d/8.5x20_Square_Trailer.glb">8.5’ x 20’</div>
-
-            <div class="trailer-size__element"
-                data-model="@/assets/models-3d/8.5x22_Square_Trailer.glb">8.5’ x 22’</div>
-            <div class="trailer-size__element"
-                data-model="@/assets/models-3d/8.5x22_Square_Trailer_7ft_porch.glb">8.5’ x 22’ porch
-            </div>
-
-
-            <div class="trailer-size__element"
-                data-model="@/assets/models-3d/8.5x24_Square_Trailer.glb">8.5’ x 24’</div>
-
-            <div class="trailer-size__element"
-                data-model="@/assets/models-3d/8.5x24_Square_Trailer_7ft_porch.glb">8.5’ x 24’ porch
-            </div>
-
-            <div class="trailer-size__element"
-                data-model="@/assets/models-3d/8.5x32_Square_Trailer_7ft_porch.glb">8.5’ x 32’ porch
-            </div>
-
-            <div class="trailer-size__element"
-                data-model="@/assets/models-3d/8.5x36_Square_Trailer_7ft_porch.glb">8.5’ x 36’ porch
-            </div>
-
-            <div class="trailer-size__element trailer-size__element--big"
-                data-model="@/assets/models-3d/8.5x40_Square_Trailer_porch_Gooseneck.glb">8.5’ x 36’
-                porch gooseneck
-            </div> -->
-
 
         </div>
     </div>
 </template>
 
 <script setup >
+//IMPORT
+import { useCounterStore } from '@/stores/counter'
 
-  import { ref, onMounted, onBeforeUnmount, computed, watch , defineEmits } from 'vue'
+import { ref, onMounted, onBeforeUnmount, computed, watch , defineEmits } from 'vue'
 
-  import modelViewer from '@/components/model-view.vue'
-
-  import trailerModel_7x12 from '@/assets/models/models-3d/7x12_Square_Trailer.glb?url';
-
-  import trailerModel_7x14 from '@/assets/models/models-3d/7x14_Square_Trailer.glb?url';
-
-  import trailerModel_7x16 from '@/assets/models/models-3d/7x16_Square_Trailer.glb?url';
-
-  import trailerModel_7x18 from '@/assets/models/models-3d/7x18_Square_Trailer.glb?url';
-
-  import trailerModel_7x20 from '@/assets/models/models-3d/7x20_Square_Trailer.glb?url';
-
-  import trailerModel_7x22 from '@/assets/models/models-3d/7x22_Square_Trailer.glb?url';
+import modelViewer from '@/components/model-view.vue'
 
 
 
-  const activeIndex = ref(0)
+//DATA
+const store = useCounterStore()
 
-  const sizeList = ref([
-    {
-        "size":"Square (standart)",
-        "model": trailerModel_7x12
-    },
-    {
-        "size":"Airstream (Curved)",
-        "model": trailerModel_7x14
-    },
-    {
-        "size":" Fully Custom (Quoted Separately)",
-        "model": trailerModel_7x16
-    },    
-  ])
+const activeIndex = ref(null)
 
-  const currentModel = ref(sizeList.value[0].model)
+const sizeList = ref(null)
 
-  const selectCurrentSize = (item, index)=>{
-    activeIndex.value = index
-    currentModel.value = item.model
-    console.log(currentModel.value)
-  }
+const currentModel = ref(null)
+
+
+//METHODS
+const selectCurrentSize = (item, index)=>{
+activeIndex.value = index
+currentModel.value = item.model.url
+console.log(currentModel.value)
+}
+
+
+//HOOKS
+onMounted(()=>{
+
+    sizeList.value = store.dataServer.foundation.stap_2
+
+    activeIndex.value = 0
+
+    currentModel.value = sizeList.value[0].model.url
+})
 
 </script>

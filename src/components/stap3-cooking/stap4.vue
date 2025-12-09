@@ -1,5 +1,5 @@
 <template>
-    <div class="body-main-data__wrapper">
+    <div class="body-main-data__wrapper" v-if="store.dataServer.equipment?.stap_4?.length >0">
 
         <modelViewer :urlModel="currentModel" />
 
@@ -27,9 +27,9 @@
                     </div>
                     
                     <div class="choice-element__data">
-                        <p class="trailer-size__element-title">{{ item.title }}</p>
+                        <p class="trailer-size__element-title">{{ item.title_value }}</p>
                         <p class="trailer-size__element-subtitle">{{ item.subtitle }}</p>
-                        <p class="trailer-size__element-cost">{{ item.cost }}</p>
+                        <p class="trailer-size__element-cost">{{ item.price }}</p>
                     </div>
 
                 </div>
@@ -40,142 +40,58 @@
 </template>
 
 <script setup >
+ import { useCounterStore } from '@/stores/counter'
 
-  import { ref, onMounted, onBeforeUnmount, computed, watch , defineEmits } from 'vue'
+import { ref, onMounted, onBeforeUnmount, computed, watch , defineEmits } from 'vue'
 
-  import modelViewer from '@/components/model-view.vue'
+import modelViewer from '@/components/model-view.vue'
 
-  import trailerModel_7x12 from '@/assets/models/models-3d/7x12_Square_Trailer.glb?url';
-
-  import trailerModel_7x14 from '@/assets/models/models-3d/7x14_Square_Trailer.glb?url';
-
-  import trailerModel_7x16 from '@/assets/models/models-3d/7x16_Square_Trailer.glb?url';
-
-  import trailerModel_7x18 from '@/assets/models/models-3d/7x18_Square_Trailer.glb?url';
-
-  import trailerModel_7x20 from '@/assets/models/models-3d/7x20_Square_Trailer.glb?url';
+import trailerModel_7x12 from '@/assets/models/models-3d/7x12_Square_Trailer.glb?url';
 
 
-  const activeIndex = ref(0)
+//DATA
+const store = useCounterStore()
 
-  const sizeList = ref([
-    {
-        "title":'Full Size Refrigerator (Single Door)',
-        "subtitle":'Full Size Refrigerator (Single Door)',
-        "cost":'+$2,200',
-        "model": trailerModel_7x12,
-        "selected": false,
-    },
-    {
-        "title":'Full Size Freezer (Single Door)',
-        "subtitle":'72" tall, 22 cu ft capacity',
-        "cost":'+$2,400',
-        "model": trailerModel_7x12,
-        "selected": false,
-    },
-    {
-        "title":'27" Sandwich Prep Table',
-        "subtitle":'Refrigerated base for cold sandwich prep',
-        "cost":'+$850',
-        "model": trailerModel_7x12,
-        "selected": false,
-    },
-    {
-        "title":'36" Sandwich Prep Table',
-        "subtitle":'Standard size for sandwich stations',
-        "cost":'+$950',
-        "model": trailerModel_7x12,
-        "selected": false,
-    },
-    {
-        "title":'48" Sandwich Prep Table',
-        "subtitle":'Large capacity for high-volume shops',
-        "cost":'+$1,150',
-        "model": trailerModel_7x12,
-        "selected": false,
-    },
-    {
-        "title":'60" Sandwich Prep Table',
-        "subtitle":'Extra large for full-service sandwich stations',
-        "cost":'+$1,350',
-        "model": trailerModel_7x12,
-        "selected": false,
-    },
-    {
-        "title":'24" Undercounter Refrigerator (Single Door)',
-        "subtitle":'6 cu ft, front breathing',
-        "cost":'+$1,250',
-        "model": trailerModel_7x12,
-        "selected": false,
-    },
-    {
-        "title":'36" Undercounter Refrigerator (Single Door)',
-        "subtitle":'9 cu ft, front breathing',
-        "cost":'+$1,750',
-        "model": trailerModel_7x12,
-        "selected": false,
-    },
-    {
-        "title":'24" Undercounter Freezer (Single Door)',
-        "subtitle":'6 cu ft, front breathing',
-        "cost":'+$1,350',
-        "model": trailerModel_7x12,
-        "selected": false,
-    },
-    {
-        "title":'36" Undercounter Freezer (Single Door)',
-        "subtitle":'9 cu ft, front breathing',
-        "cost":'+$1,850',
-        "model": trailerModel_7x12,
-        "selected": false,
-    },
-    {
-        "title":'24" Reach-In Refrigerator (Single Door)',
-        "subtitle":'24 cu ft, 4 shelves, LED lighting',
-        "cost":'+$1,950',
-        "model": trailerModel_7x12,
-        "selected": false,
-    },
-    {
-        "title":'36" Reach-In Refrigerator (Single Door)',
-        "subtitle":'36 cu ft, 6 shelves, LED lighting',
-        "cost":'+$2,250',
-        "model": trailerModel_7x12,
-        "selected": false,
-    },
-    {
-        "title":'24" Reach-In Freezer (Single Door)',
-        "subtitle":'22 cu ft, 4 shelves, low-temp capability',
-        "cost":'+$2,050',
-        "model": trailerModel_7x12,
-        "selected": false,
-    },
-    {
-        "title":'36" Reach-In Freezer (Single Door)',
-        "subtitle":'34 cu ft, 6 shelves, low-temp capability',
-        "cost":'+$2,450',
-        "model": trailerModel_7x12,
-        "selected": false,
-    },
-    {
-        "title":'Glass Door Beverage Refrigerator',
-        "subtitle":'For drinks display and storage',
-        "cost":'+$1,950',
-        "model": trailerModel_7x12,
-        "selected": false,
-    },
+const activeIndex = ref(null)
+
+const sizeList = ref(null)
+
+const currentModel = ref(null)
+
+//METHODS
+const selectCurrentSize = (item, index)=>{
+activeIndex.value = index
+
+if(item.model?.url){
+currentModel.value = item.model.url
+}
+else{
+currentModel.value = trailerModel_7x12
+}
+
+console.log(currentModel.value)
+
+sizeList.value[index].selected = !sizeList.value[index].selected
+}
 
 
-  ])
+//HOOKS
+onMounted(()=>{
 
-  const currentModel = ref(sizeList.value[0].model)
+    sizeList.value = store.dataServer.equipment.stap_4
 
-  const selectCurrentSize = (item, index)=>{
-    activeIndex.value = index
-    // currentModel.value = item.model
-    // console.log(currentModel.value)
+    sizeList.value.forEach(item => {
+        item.selected = false
+    })
 
-    sizeList.value[index].selected = !sizeList.value[index].selected
-  }
-
+    activeIndex.value = 0
+    
+    if(sizeList.value[0].model?.url){
+        currentModel.value = sizeList.value[0].model.url
+    }
+    else{
+        currentModel.value = trailerModel_7x12
+    }
+    
+})
 </script>

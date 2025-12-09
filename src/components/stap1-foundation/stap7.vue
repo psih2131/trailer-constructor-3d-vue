@@ -1,5 +1,5 @@
 <template>
-    <div class="body-main-data__wrapper">
+    <div class="body-main-data__wrapper" v-if="store.dataServer.foundation?.stap_7?.length >0">
 
         <modelViewer :urlModel="currentModel" />
 
@@ -11,13 +11,12 @@
                 @click="selectCurrentSize(item,index)"
                 data-model="@/assets/models-3d/7x12_Square_Trailer.glb">
                 
-                    <p class="trailer-size__element-title">{{ item.size }}</p>
+                    <p class="trailer-size__element-title">{{ item.title_value }}</p>
                     <p class="trailer-size__element-subtitle">{{ item.subtitle }}</p>
-                    <p class="trailer-size__element-cost">{{ item.cost }}</p>
+                    <p class="trailer-size__element-cost">{{ item.price }}</p>
 
                 </div>
 
-                
             </template>
 
             <div class="trailer-size__element-inform">
@@ -38,74 +37,53 @@
 
 <script setup >
 
-  import { ref, onMounted, onBeforeUnmount, computed, watch , defineEmits } from 'vue'
+import { useCounterStore } from '@/stores/counter'
 
-  import modelViewer from '@/components/model-view.vue'
+import { ref, onMounted, onBeforeUnmount, computed, watch , defineEmits } from 'vue'
 
-  import trailerModel_7x12 from '@/assets/models/models-3d/7x12_Square_Trailer.glb?url';
+import modelViewer from '@/components/model-view.vue'
 
-  import trailerModel_7x14 from '@/assets/models/models-3d/7x14_Square_Trailer.glb?url';
-
-  import trailerModel_7x16 from '@/assets/models/models-3d/7x16_Square_Trailer.glb?url';
-
-  import trailerModel_7x18 from '@/assets/models/models-3d/7x18_Square_Trailer.glb?url';
-
-  import trailerModel_7x20 from '@/assets/models/models-3d/7x20_Square_Trailer.glb?url';
-
-  import trailerModel_7x22 from '@/assets/models/models-3d/7x22_Square_Trailer.glb?url';
+import trailerModel_7x12 from '@/assets/models/models-3d/7x12_Square_Trailer.glb?url';
 
 
+//DATA
+const store = useCounterStore()
 
-  const activeIndex = ref(0)
+const activeIndex = ref(null)
 
-  const sizeList = ref([
-    {
-        "size":"Standard Tandem Axles",
-        "subtitle": "5200lb axles for standard trailers",
-        "model": trailerModel_7x12,
-        "cost": "Standard"
-    },
-    {
-        "size":"Upgrade to 7000lb Tandem Axles",
-        "subtitle": "For medium-duty loads and equipment",
-        "model": trailerModel_7x14,
-        "cost": "+$800"
-    },
+const sizeList = ref(null)
+
+const currentModel = ref(null)
+
+//METHODS
+const selectCurrentSize = (item, index)=>{
+activeIndex.value = index
+
+if(item.model?.url){
+currentModel.value = item.model.url
+}
+else{
+currentModel.value = trailerModel_7x12
+}
+
+console.log(currentModel.value)
+}
+
+
+//HOOKS
+onMounted(()=>{
+
+    sizeList.value = store.dataServer.foundation.stap_7
+
+    activeIndex.value = 0
     
-    {
-        "size":"Upgrade to 10000lb Tandem Axles",
-        "subtitle": "For heavy-duty equipment and supplies",
-        "model": trailerModel_7x16,
-        "cost": "+$1,600"
-    },
+    if(sizeList.value[0].model?.url){
+        currentModel.value = sizeList.value[0].model.url
+    }
+    else{
+        currentModel.value = trailerModel_7x12
+    }
     
-    {
-        "size":"Triple 5200lb Axles",
-        "subtitle": "For extreme loads and large trailers",
-        "model": trailerModel_7x12,
-        "cost": "+$3,000"
-    },
-    {
-        "size":"Triple 7000lb Axles",
-        "subtitle": "Maximum capacity for oversized trailers",
-        "model": trailerModel_7x14,
-        "cost": "+$4,500"
-    },
-    
-    {
-        "size":"Triple 10000lb Axles",
-        "subtitle": "For commercial-grade trailers",
-        "model": trailerModel_7x16,
-        "cost": "+$6,000"
-    }, 
-  ])
-
-  const currentModel = ref(sizeList.value[0].model)
-
-  const selectCurrentSize = (item, index)=>{
-    activeIndex.value = index
-    currentModel.value = item.model
-    console.log(currentModel.value)
-  }
+})
 
 </script>

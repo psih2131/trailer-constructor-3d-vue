@@ -1,5 +1,5 @@
 <template>
-    <div class="body-main-data__wrapper">
+    <div class="body-main-data__wrapper" v-if="store.dataServer['add-ons']?.stap_4?.length >0">
 
         <modelViewer :urlModel="currentModel" />
 
@@ -26,9 +26,9 @@
                     </div>
                     
                     <div class="choice-element__data">
-                        <p class="trailer-size__element-title">{{ item.title }}</p>
+                         <p class="trailer-size__element-title">{{ item.title_value }}</p>
                         <p class="trailer-size__element-subtitle">{{ item.subtitle }}</p>
-                        <p class="trailer-size__element-cost">{{ item.cost }}</p>
+                        <p class="trailer-size__element-cost">{{ item.price }}</p>
                     </div>
 
                 </div>
@@ -39,75 +39,58 @@
 </template>
 
 <script setup >
+import { useCounterStore } from '@/stores/counter'
 
-  import { ref, onMounted, onBeforeUnmount, computed, watch , defineEmits } from 'vue'
+import { ref, onMounted, onBeforeUnmount, computed, watch , defineEmits } from 'vue'
 
-  import modelViewer from '@/components/model-view.vue'
+import modelViewer from '@/components/model-view.vue'
 
-  import trailerModel_7x12 from '@/assets/models/models-3d/7x12_Square_Trailer.glb?url';
-
-  import trailerModel_7x14 from '@/assets/models/models-3d/7x14_Square_Trailer.glb?url';
-
-  import trailerModel_7x16 from '@/assets/models/models-3d/7x16_Square_Trailer.glb?url';
-
-  import trailerModel_7x18 from '@/assets/models/models-3d/7x18_Square_Trailer.glb?url';
-
-  import trailerModel_7x20 from '@/assets/models/models-3d/7x20_Square_Trailer.glb?url';
+import trailerModel_7x12 from '@/assets/models/models-3d/7x12_Square_Trailer.glb?url';
 
 
-  const activeIndex = ref(0)
+//DATA
+const store = useCounterStore()
 
-  const sizeList = ref([
-    {
-        "title":'43" Exterior TV Menu Display',
-        "subtitle":'Weatherproof digital menu board',
-        "cost":'+$1,150',
-        "model": trailerModel_7x12,
-        "selected": false,
-    },
+const activeIndex = ref(null)
 
-    {
-        "title":'Full Vinyl Wrap',
-        "subtitle":'Complete custom-designed wrap',
-        "cost":'+$4,000',
-        "model": trailerModel_7x12,
-        "selected": false,
-    },
+const sizeList = ref(null)
 
-    {
-        "title":'WiFi/Internet System',
-        "subtitle":'Router, antenna, cellular backup',
-        "cost":'+$650',
-        "model": trailerModel_7x12,
-        "selected": false,
-    },
-    {
-        "title":'POS System Package',
-        "subtitle":'Tablet, printer, cash drawer, and mounting hardware',
-        "cost":'+$1,250',
-        "model": trailerModel_7x12,
-        "selected": false,
-    },
+const currentModel = ref(null)
 
-    {
-        "title":'Complete Solar System',
-        "subtitle":'Full off-grid capability with panels, batteries, and inverter',
-        "cost":'+$8,500',
-        "model": trailerModel_7x12,
-        "selected": false,
-    },
+//METHODS
+const selectCurrentSize = (item, index)=>{
+activeIndex.value = index
 
+if(item.model?.url){
+currentModel.value = item.model.url
+}
+else{
+currentModel.value = trailerModel_7x12
+}
+
+console.log(currentModel.value)
+
+sizeList.value[index].selected = !sizeList.value[index].selected
+}
+
+
+//HOOKS
+onMounted(()=>{
+
+    sizeList.value = store.dataServer['add-ons'].stap_4
+
+    sizeList.value.forEach(item => {
+        item.selected = false
+    })
+
+    activeIndex.value = 0
     
-  ])
-
-  const currentModel = ref(sizeList.value[0].model)
-
-  const selectCurrentSize = (item, index)=>{
-    activeIndex.value = index
-    // currentModel.value = item.model
-    // console.log(currentModel.value)
-
-    sizeList.value[index].selected = !sizeList.value[index].selected
-  }
-
+    if(sizeList.value[0].model?.url){
+        currentModel.value = sizeList.value[0].model.url
+    }
+    else{
+        currentModel.value = trailerModel_7x12
+    }
+    
+})
 </script>
