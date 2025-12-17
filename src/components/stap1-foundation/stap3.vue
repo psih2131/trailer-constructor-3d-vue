@@ -44,14 +44,21 @@ const currentModel = ref(null)
 const selectCurrentSize = (item, index)=>{
 activeIndex.value = index
 
-if(item.model?.url){
-currentModel.value = item.model.url
-}
-else{
-currentModel.value = trailerModel_7x12
-}
+// if(item.model?.url){
+// currentModel.value = item.model.url
+// }
+// else{
+// currentModel.value = trailerModel_7x12
+// }
 
 console.log(currentModel.value)
+
+
+store.stapsMemory.stap1_Foundation.stap3.currentIndex = index
+store.stapsMemory.stap1_Foundation.stap3.priceValue = item.price_value
+
+console.log(store.stapsMemory)
+
 }
 
 
@@ -62,12 +69,45 @@ onMounted(()=>{
 
     activeIndex.value = 0
     
-    if(sizeList.value[0].model?.url){
-        currentModel.value = sizeList.value[0].model.url
+    // if(sizeList.value[0].model?.url){
+    //     currentModel.value = sizeList.value[0].model.url
+    // }
+    // else{
+    //     currentModel.value = trailerModel_7x12
+    // }
+
+
+    if(store.stapsMemory.stap1_Foundation.stap3.currentIndex){
+        let currentIndexSelect = +store.stapsMemory.stap1_Foundation.stap3.currentIndex
+
+        activeIndex.value =  currentIndexSelect
+
+        // currentModel.value = sizeList.value[+currentIndexSelect].model.url
     }
     else{
-        currentModel.value = trailerModel_7x12
+        activeIndex.value = 0
+
+        // currentModel.value = sizeList.value[0].model.url
+
+        store.stapsMemory.stap1_Foundation.stap3.currentIndex = 0
+        
+        store.stapsMemory.stap1_Foundation.stap3.priceValue = store.dataServer.foundation.stap_3[0].price_value
     }
+
+    //current model
+    let trailerStyleTitle = store.stapsMemory.stap1_Foundation.stap2.titleValue
+
+    if(trailerStyleTitle == 'Airstream (Curved)'){
+        currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model_aerostream.url
+    }
+    else{
+        currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model.url
+    }
+
+
+   console.log(store.stapsMemory)
+
+
     
 })
 

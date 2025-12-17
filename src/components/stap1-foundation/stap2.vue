@@ -42,20 +42,61 @@ const currentModel = ref(null)
 
 //METHODS
 const selectCurrentSize = (item, index)=>{
-activeIndex.value = index
-currentModel.value = item.model.url
-console.log(currentModel.value)
+    activeIndex.value = index
+    // currentModel.value = item.model.url
+    // console.log(currentModel.value)
+
+    if(item.title_value == 'Airstream (Curved)'){
+        currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model_aerostream.url
+    }
+    else{
+        currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model.url
+    }
+
+    store.stapsMemory.stap1_Foundation.stap2.currentIndex = index
+    store.stapsMemory.stap1_Foundation.stap2.priceValue = item.price_value
+    store.stapsMemory.stap1_Foundation.stap2.titleValue = item.title_value
+
+
+    console.log(store.stapsMemory)
+
 }
 
 
 //HOOKS
 onMounted(()=>{
+    
 
     sizeList.value = store.dataServer.foundation.stap_2
+     
+    if(store.stapsMemory.stap1_Foundation.stap2.currentIndex){
+        let currentIndexSelect = +store.stapsMemory.stap1_Foundation.stap2.currentIndex
 
-    activeIndex.value = 0
+        activeIndex.value =  currentIndexSelect
 
-    currentModel.value = sizeList.value[0].model.url
+        // currentModel.value = sizeList.value[+currentIndexSelect].model.url
+
+        let trailerStyleTitle = store.stapsMemory.stap1_Foundation.stap2.titleValue
+        if(trailerStyleTitle == 'Airstream (Curved)'){
+            currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model_aerostream.url
+        }
+        else{
+            currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model.url
+        }
+    }
+    else{
+        activeIndex.value = 0
+
+        // currentModel.value = sizeList.value[0].model.url
+        currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model.url
+
+        store.stapsMemory.stap1_Foundation.stap2.currentIndex = 0
+        
+        store.stapsMemory.stap1_Foundation.stap2.priceValue = store.dataServer.foundation.stap_2[0].price_value
+        store.stapsMemory.stap1_Foundation.stap2.titleValue = store.dataServer.foundation.stap_2[0].titleValue
+    }
+
+   console.log(store.stapsMemory)
 })
 
 </script>

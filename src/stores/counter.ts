@@ -17,6 +17,109 @@ export const useCounterStore = defineStore('counter', () => {
 
   const getQuoteCounter = ref<number>(1)
 
+  const stapsMemory = ref<any>({
+    'stap1_Foundation': {
+      'stap1': {
+        'title': 'Trailer Size',
+        'currentIndex': null,
+        'materialCost': null,
+        'buildCost': null,
+        'priceValue': null,
+
+      },
+      'stap2': {
+        'title': 'Trailer Style',
+        'currentIndex': null,
+        'priceValue': null,
+        'titleValue': null,
+      },
+      'stap3': {
+        'title': 'Porch Length',
+        'currentIndex': null,
+        'priceValue': null,
+      },
+      'stap4': {
+        'title': 'Hitch Type',
+        'currentIndex': null,
+        'priceValue': null,
+      },
+      'stap5': {
+        'title': 'Interior Height',
+        'currentIndex': null,
+        'priceValue': null,
+      },
+      'stap6': {
+        'title': 'Frame Material',
+        'currentIndex': null,
+        'priceValue': null,
+      },
+      'stap7': {
+        'title': 'Axle & Suspension',
+        'currentIndex': null,
+        'priceValue': null,
+      },
+    },
+
+    'stap2_Utilities': {
+      'stap1': {
+        'title': 'Electrical & Power',
+        'selectedElements': []
+      },
+      'stap2': {
+        'title': 'Propane Systems',
+        'selectedElements': []
+      },
+      'stap3': {
+        'title': 'Solar Power Options',
+        'selectedElements': []
+      },
+      'stap4': {
+        'title': 'Plumbing & Water',
+        'selectedElements': []
+      },
+    },
+
+
+    'stap3_Equipment': {
+      'stap1': {
+        'title': 'Cooking Equipment',
+        'selectedElements': []
+      },
+      'stap2': {
+        'title': 'Ventilation & Climate',
+        'selectedElements': []
+      },
+      'stap3': {
+        'title': 'Warming & Holding',
+        'selectedElements': []
+      },
+      'stap4': {
+        'title': 'Refrigeration',
+        'selectedElements': []
+      },
+    },
+
+
+    'stap4_AddOns': {
+      'stap1': {
+        'title': 'Safety & Fire Suppression',
+        'selectedElements': []
+      },
+      'stap2': {
+        'title': 'Prep & Shelving',
+        'selectedElements': []
+      },
+      'stap3': {
+        'title': 'Exterior Add-ons',
+        'selectedElements': []
+      },
+      'stap4': {
+        'title': 'Specialty & Marketing',
+        'selectedElements': []
+      },
+    },
+  })
+
   function changeStapCounter(newValue: number) {
     stapCounter.value = newValue
     console.log('stapCounter.value', stapCounter.value)
@@ -48,6 +151,7 @@ export const useCounterStore = defineStore('counter', () => {
   }
 
 
+
   return {
     stapCounter,
     foundationCounter,
@@ -56,6 +160,7 @@ export const useCounterStore = defineStore('counter', () => {
     addOnsCounter,
     getQuoteCounter,
     dataServer,
+    stapsMemory,
 
     changeStapCounter,
     changeFoundationCounter,
@@ -64,5 +169,6 @@ export const useCounterStore = defineStore('counter', () => {
     changeAddOnsCounter,
     changeGetQuoteCounter,
     changeDataServer,
+
   }
 })
