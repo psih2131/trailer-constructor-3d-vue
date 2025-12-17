@@ -299,22 +299,22 @@ function processAddOns() {
 
 function sendForm() {
     let config1Text = `_
-    
+
     _________________________________________________
 
     Trailer info:
 
     ${store.stapsMemory.stap1_Foundation.stap1.title}: ${store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].title_value}
-    ${store.stapsMemory.stap1_Foundation.stap2.title}: ${store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap2.currentIndex].title_value}
-    ${store.stapsMemory.stap1_Foundation.stap3.title}: ${store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap3.currentIndex].title_value}
-    ${store.stapsMemory.stap1_Foundation.stap4.title}: ${store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap4.currentIndex].title_value}
-    ${store.stapsMemory.stap1_Foundation.stap5.title}: ${store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap5.currentIndex].title_value}
-    ${store.stapsMemory.stap1_Foundation.stap6.title}: ${store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap6.currentIndex].title_value}
-    ${store.stapsMemory.stap1_Foundation.stap7.title}: ${store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap7.currentIndex].title_value}
+    ${store.stapsMemory.stap1_Foundation.stap2.title}: ${store.dataServer.foundation.stap_2[+store.stapsMemory.stap1_Foundation.stap2.currentIndex].title_value}
+    ${store.stapsMemory.stap1_Foundation.stap3.title}: ${store.dataServer.foundation.stap_3[+store.stapsMemory.stap1_Foundation.stap3.currentIndex].title_value}
+    ${store.stapsMemory.stap1_Foundation.stap4.title}: ${store.dataServer.foundation.stap_4[+store.stapsMemory.stap1_Foundation.stap4.currentIndex].title_value}
+    ${store.stapsMemory.stap1_Foundation.stap5.title}: ${store.dataServer.foundation.stap_5[+store.stapsMemory.stap1_Foundation.stap5.currentIndex].title_value}
+    ${store.stapsMemory.stap1_Foundation.stap6.title}: ${store.dataServer.foundation.stap_6[+store.stapsMemory.stap1_Foundation.stap6.currentIndex].title_value}
+    ${store.stapsMemory.stap1_Foundation.stap7.title}: ${store.dataServer.foundation.stap_7[+store.stapsMemory.stap1_Foundation.stap7.currentIndex].title_value}
 
     _________________________________________________
 
-   Equipment & Add-ons:
+    Equipment & Add-ons:
 
     `
     // let config1 = document.querySelector('.selections .selections__table').innerText 
