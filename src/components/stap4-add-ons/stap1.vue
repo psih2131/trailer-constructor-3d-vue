@@ -131,13 +131,30 @@ onMounted(()=>{
     }
 
     //current model
+    
     let trailerStyleTitle = store.stapsMemory.stap1_Foundation.stap2.titleValue
+    let trailerPorchLength = store.stapsMemory.stap1_Foundation.stap3.titleValue
+
+    console.log('trailerStyleTitle', trailerStyleTitle)
+    console.log('trailerPorchLength', trailerPorchLength)
     
     if(trailerStyleTitle == 'Airstream (Curved)'){
-        currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model_aerostream.url
+        if(trailerPorchLength != 'No Porch'){
+            currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model_aerostream_porch.url
+        }
+        else{
+            currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model_aerostream.url
+        }
+        
     }
     else{
-        currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model.url
+        if(trailerPorchLength != 'No Porch'){
+            currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model_porch.url
+        }
+        else{
+            currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model.url
+        }
+      
     }
 
    console.log(store.stapsMemory)

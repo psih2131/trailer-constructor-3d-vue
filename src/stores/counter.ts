@@ -41,6 +41,7 @@ export const useCounterStore = defineStore('counter', () => {
         'title': 'Porch Length',
         'currentIndex': null,
         'priceValue': null,
+        'titleValue': null,
       },
       'stap4': {
         'title': 'Hitch Type',

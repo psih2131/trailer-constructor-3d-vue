@@ -93,7 +93,8 @@ onMounted(()=>{
         store.stapsMemory.stap1_Foundation.stap2.currentIndex = 0
         
         store.stapsMemory.stap1_Foundation.stap2.priceValue = store.dataServer.foundation.stap_2[0].price_value
-        store.stapsMemory.stap1_Foundation.stap2.titleValue = store.dataServer.foundation.stap_2[0].titleValue
+        store.stapsMemory.stap1_Foundation.stap2.titleValue = store.dataServer.foundation.stap_2[0].title_value
+
     }
 
    console.log(store.stapsMemory)

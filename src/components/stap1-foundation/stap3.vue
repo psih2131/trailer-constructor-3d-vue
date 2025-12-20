@@ -43,19 +43,38 @@ const currentModel = ref(null)
 //METHODS
 const selectCurrentSize = (item, index)=>{
 activeIndex.value = index
+let trailerStyleTitle = store.stapsMemory.stap1_Foundation.stap2.titleValue
 
-// if(item.model?.url){
-// currentModel.value = item.model.url
-// }
-// else{
-// currentModel.value = trailerModel_7x12
-// }
+console.log('trailerStyleTitle', trailerStyleTitle)
+
+if(item.title_value != 'No Porch'){
+
+    if(trailerStyleTitle == 'Airstream (Curved)'){
+        currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model_aerostream_porch.url
+
+        console.log('currentModel.value', currentModel.value)
+    }
+    else{
+        currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model_porch.url
+    }
+}
+else{
+   
+
+    if(trailerStyleTitle == 'Airstream (Curved)'){
+        currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model_aerostream.url
+    }
+    else{
+        currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model.url
+    }
+}
 
 console.log(currentModel.value)
 
 
 store.stapsMemory.stap1_Foundation.stap3.currentIndex = index
 store.stapsMemory.stap1_Foundation.stap3.priceValue = item.price_value
+store.stapsMemory.stap1_Foundation.stap3.titleValue = item.title_value
 
 console.log(store.stapsMemory)
 
@@ -92,22 +111,38 @@ onMounted(()=>{
         store.stapsMemory.stap1_Foundation.stap3.currentIndex = 0
         
         store.stapsMemory.stap1_Foundation.stap3.priceValue = store.dataServer.foundation.stap_3[0].price_value
+        store.stapsMemory.stap1_Foundation.stap3.titleValue = store.dataServer.foundation.stap_3[0].title_value
     }
 
     //current model
+    
     let trailerStyleTitle = store.stapsMemory.stap1_Foundation.stap2.titleValue
+    let trailerPorchLength = store.stapsMemory.stap1_Foundation.stap3.titleValue
 
+    console.log('trailerStyleTitle', trailerStyleTitle)
+    console.log('trailerPorchLength', trailerPorchLength)
+    
     if(trailerStyleTitle == 'Airstream (Curved)'){
-        currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model_aerostream.url
+        if(trailerPorchLength != 'No Porch'){
+            currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model_aerostream_porch.url
+        }
+        else{
+            currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model_aerostream.url
+        }
+        
     }
     else{
-        currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model.url
-    }
+        if(trailerPorchLength != 'No Porch'){
+            currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model_porch.url
+        }
+        else{
+            currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model.url
+        }
+      
+    }    
 
 
    console.log(store.stapsMemory)
-
-
     
 })
 
