@@ -17,6 +17,10 @@ export const useCounterStore = defineStore('counter', () => {
 
   const getQuoteCounter = ref<number>(1)
 
+  const popupCurrent = ref<any>(null)
+
+  const popupCloseAll = ref<any>(true)
+
   const stapsMemory = ref<any>({
     'stap1_Foundation': {
       'stap1': {
@@ -150,6 +154,16 @@ export const useCounterStore = defineStore('counter', () => {
     console.log('dataServer', dataServer.value)
   }
 
+  function changePopupCurrent(newValue: any) {
+    popupCurrent.value = newValue
+
+    console.log('popupCurrent', popupCurrent.value)
+  }
+  const changePopupCloseAll = () => {
+    popupCloseAll.value = !popupCloseAll.value
+    console.log('new value store', popupCloseAll.value)
+  }
+
 
 
   return {
@@ -161,6 +175,8 @@ export const useCounterStore = defineStore('counter', () => {
     getQuoteCounter,
     dataServer,
     stapsMemory,
+    popupCurrent,
+    popupCloseAll,
 
     changeStapCounter,
     changeFoundationCounter,
@@ -169,6 +185,7 @@ export const useCounterStore = defineStore('counter', () => {
     changeAddOnsCounter,
     changeGetQuoteCounter,
     changeDataServer,
-
+    changePopupCurrent,
+    changePopupCloseAll,
   }
 })

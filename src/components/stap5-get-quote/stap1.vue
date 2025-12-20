@@ -436,8 +436,8 @@ _________
     })
     .then(data => {
         console.log(data)
-        alert('request was sent')
-
+        // alert('request was sent')
+        store.changePopupCurrent('popup-done')
         formFirstName.value = ''
         formLastName.value = ''
         formEmail.value = ''
