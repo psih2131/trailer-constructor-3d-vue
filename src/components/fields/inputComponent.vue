@@ -1,10 +1,14 @@
 <template>
     <div class="order-form__input" :class="{'order-form__input--long': longStatus== true}">
         <p class="order-form__input-title" v-if="title" v-html="title"></p>
-        <div class="order-form__input-wrapper">
+        <div class="order-form__input-wrapper" :class="{'order-form__input-wrapper--error': validStatus == false}">
             <input type="text" placeholder="John" 
             :value="modelValue"
             @input="emit('update:modelValue', $event.target.value)">
+
+            <!-- <p class="valid-error-text" v-if="!validStatus">
+                Incorrect data
+            </p> -->
         </div>
     </div>
 </template>
@@ -15,7 +19,13 @@ import { ref, onMounted, onBeforeUnmount, computed, watch , defineEmits } from '
 defineProps({
     title: String,
     modelValue: String,
-    longStatus: Boolean
+    longStatus: Boolean,
+    validStatus: {
+        type: [Boolean, null],
+        default: null
+    },
+    inputType: String,
+
 })
 
 const dataInp = ref(null)

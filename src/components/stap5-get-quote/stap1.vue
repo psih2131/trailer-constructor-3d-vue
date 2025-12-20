@@ -113,13 +113,13 @@
 
             <div class="order-form__wrapper">
 
-                <inputComponent :title="'First name *'" v-model="formFirstName"/>
+                <inputComponent :title="'First name *'" v-model="formFirstName" :inputType="'text'" :validStatus="formFirstNameValidStatus"/>
 
-                <inputComponent :title="'Last Name *'" v-model="formLastName"/>
+                <inputComponent :title="'Last Name *'" v-model="formLastName" :inputType="'text'" :validStatus="formLastNameValidStatus"/>
 
-                <inputComponent :title="'Email Address *'" v-model="formEmail"/>
+                <inputComponent :title="'Email Address *'" v-model="formEmail" :inputType="'email'" :validStatus="formEmailValidStatus"/>
 
-                <inputComponent :title="'Phone Number *'" v-model="formPhone"/>
+                <inputComponent :title="'Phone Number *'" v-model="formPhone" :inputType="'phone'" :validStatus="formPhoneValidStatus"/>
 
                 <inputComponent :title="'Business Name (Optional)'" :longStatus="true" v-model="formBusinessName"/>
 
@@ -147,14 +147,20 @@
                         <span>BACK</span>
                     </div>
 
-                    <div class="order-form__send-offer" @click="sendForm">
+                    <div class="order-form__send-offer" @click="validationFormData()">
                         Get My Custom Quote
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M21.9362 5.17015L18.9062 19.3552C18.6802 20.3542 18.1002 20.5792 17.2622 20.1282L12.7172 16.7761L10.4922 18.9032C10.2672 19.1292 10.0412 19.3552 9.52516 19.3552L9.88016 14.6802L18.3582 6.97615C18.7122 6.62115 18.2612 6.49215 17.8102 6.78315L7.26916 13.4232L2.72316 12.0372C1.72416 11.7152 1.72416 11.0372 2.94916 10.5872L20.6142 3.72015C21.4842 3.46215 22.2262 3.91415 21.9362 5.17015Z" fill="white"/>
                         </svg>
 
                     </div>
+
+                   
                 </div>
+
+                <p class="order-form__down-controll-row-validation valid-error-text" v-if="validFormStatus == false">
+                    Validation error. Please check that all form fields are filled out correctly.
+                </p>
                 
             </div>
         </div>
@@ -178,11 +184,19 @@
 
   const formFirstName = ref(null)
 
+  const formFirstNameValidStatus = ref(null)
+
   const formLastName = ref(null)
+  
+  const formLastNameValidStatus = ref(null)
   
   const formEmail = ref(null)
 
+  const formEmailValidStatus = ref(null)
+
   const formPhone = ref(null)
+
+  const formPhoneValidStatus = ref(null)
 
   const formBusinessName = ref(null)
 
@@ -197,6 +211,8 @@
   const totalPrice = ref(0)
 
   const totalPriceClient = ref(0)
+
+  const validFormStatus = ref(null)
 
   function getCurrentFoundationValue(index){
     return index
@@ -296,34 +312,91 @@ function processAddOns() {
 }
 
 
+const validationFormData = () =>{
+    formFirstNameValidStatus.value = validName(formLastName.value)
+
+    formLastNameValidStatus.value = validName(formLastName.value)
+
+    formPhoneValidStatus.value = validPhone(formPhone.value)
+
+    formEmailValidStatus.value = validEmail(formEmail.value)
+
+
+    if(formFirstNameValidStatus.value == true &&
+    formLastNameValidStatus.value == true &&
+    formPhoneValidStatus.value == true && 
+    formEmailValidStatus.value == true){
+        console.log('valid true')
+        validFormStatus.value = true
+        sendForm()
+    }
+    else{
+        console.log('valid false')
+        validFormStatus.value = false
+    }
+}
+
+
+function validName(element) {
+  if (element && element.length >= 3) {
+    return  true
+  } else {
+    return false
+  }
+}
+
+
+
+function validPhone(phone) {
+  const re = /^\+?\d{10,15}$/
+  if (phone && re.test(phone)) {
+    return true
+  } else {
+    return false
+  }
+}
+
+
+function validEmail(email) {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (email && re.test(email)) {
+    return true
+  } else {
+    return false
+  }
+}
+
 
 function sendForm() {
-    let config1Text = `_
+let config1Text = `_
 
-    _________________________________________________
+_________
 
-    Trailer info:
 
-    ${store.stapsMemory.stap1_Foundation.stap1.title}: ${store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].title_value}
-    ${store.stapsMemory.stap1_Foundation.stap2.title}: ${store.dataServer.foundation.stap_2[+store.stapsMemory.stap1_Foundation.stap2.currentIndex].title_value}
-    ${store.stapsMemory.stap1_Foundation.stap3.title}: ${store.dataServer.foundation.stap_3[+store.stapsMemory.stap1_Foundation.stap3.currentIndex].title_value}
-    ${store.stapsMemory.stap1_Foundation.stap4.title}: ${store.dataServer.foundation.stap_4[+store.stapsMemory.stap1_Foundation.stap4.currentIndex].title_value}
-    ${store.stapsMemory.stap1_Foundation.stap5.title}: ${store.dataServer.foundation.stap_5[+store.stapsMemory.stap1_Foundation.stap5.currentIndex].title_value}
-    ${store.stapsMemory.stap1_Foundation.stap6.title}: ${store.dataServer.foundation.stap_6[+store.stapsMemory.stap1_Foundation.stap6.currentIndex].title_value}
-    ${store.stapsMemory.stap1_Foundation.stap7.title}: ${store.dataServer.foundation.stap_7[+store.stapsMemory.stap1_Foundation.stap7.currentIndex].title_value}
+Trailer info:
 
-    _________________________________________________
+${store.stapsMemory.stap1_Foundation.stap1.title}: ${store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].title_value}
+${store.stapsMemory.stap1_Foundation.stap2.title}: ${store.dataServer.foundation.stap_2[+store.stapsMemory.stap1_Foundation.stap2.currentIndex].title_value}
+${store.stapsMemory.stap1_Foundation.stap3.title}: ${store.dataServer.foundation.stap_3[+store.stapsMemory.stap1_Foundation.stap3.currentIndex].title_value}
+${store.stapsMemory.stap1_Foundation.stap4.title}: ${store.dataServer.foundation.stap_4[+store.stapsMemory.stap1_Foundation.stap4.currentIndex].title_value}
+${store.stapsMemory.stap1_Foundation.stap5.title}: ${store.dataServer.foundation.stap_5[+store.stapsMemory.stap1_Foundation.stap5.currentIndex].title_value}
+${store.stapsMemory.stap1_Foundation.stap6.title}: ${store.dataServer.foundation.stap_6[+store.stapsMemory.stap1_Foundation.stap6.currentIndex].title_value}
+${store.stapsMemory.stap1_Foundation.stap7.title}: ${store.dataServer.foundation.stap_7[+store.stapsMemory.stap1_Foundation.stap7.currentIndex].title_value}
 
-    Equipment & Add-ons:
+_________
 
-    `
-    // let config1 = document.querySelector('.selections .selections__table').innerText 
 
-    let config2 = document.querySelector('.eqyip-table .selections__table').innerText 
+Equipment & Add-ons:
 
-    let rowX = `
-    _________________________________________________
-    `
+`
+// let config1 = document.querySelector('.selections .selections__table').innerText 
+
+let config2 = document.querySelector('.eqyip-table .selections__table').innerText 
+
+let rowX = `
+_________
+
+`
     console.log(config1Text)
     console.log(config2)
     let formData = new FormData();
@@ -364,6 +437,14 @@ function sendForm() {
     .then(data => {
         console.log(data)
         alert('request was sent')
+
+        formFirstName.value = ''
+        formLastName.value = ''
+        formEmail.value = ''
+        formPhone.value = ''
+        formBusinessName.value = ''
+        formText.value = ''
+
     })
     .catch(err => {
         alert(err)
