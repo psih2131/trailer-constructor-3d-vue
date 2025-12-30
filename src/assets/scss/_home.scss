@@ -734,6 +734,10 @@
     text-align: center;
 }
 
+.trailer-size__element-title-smaller {
+    font-size: 15px;
+}
+
 
 
 
@@ -860,4 +864,385 @@
 .hidePreloader {
     opacity: 0;
     z-index: -100;
+}
+
+
+@media only screen and (max-width: 1350px) {
+    .container-builder {
+        width: 750px;
+    }
+
+    .container-header {
+        width: 750px;
+    }
+
+    .header__btn {
+        padding: 12px 20px;
+    }
+
+    .header__btn span {
+        font-size: 14px;
+    }
+
+    .header__logo {
+        width: 70px;
+    }
+
+    .header__down {
+        padding: 25px 0;
+    }
+
+    .builder-sec__title {
+        font-size: 28px;
+    }
+
+    .builder-sec__subtitle {
+        margin-top: 10px;
+        font-size: 14px;
+    }
+
+    .builder-sec__header-staps-row {
+        margin-top: 30px;
+    }
+
+    .builder-header-stap__icon-wrapper {
+        width: 42px;
+        height: 42px;
+
+        svg {
+
+            width: 15px;
+            height: 15px;
+        }
+    }
+
+    .builder-header-stap__name {
+        font-size: 14px;
+    }
+
+    .builder-sec__header {
+        padding: 30px;
+    }
+
+    .body-stap__text {
+        display: none;
+    }
+
+    .body-staps-wrapper {
+        width: 120px;
+        padding: 20px;
+    }
+
+    .body-staps-wrapper__btn-wrapper {
+        flex-wrap: wrap;
+    }
+
+    .body-staps-wrapper__btn {
+        width: 100%;
+        text-align: center;
+        padding: 15px 0;
+        margin-bottom: 10px;
+
+        span {
+            font-size: 14px;
+        }
+    }
+
+    .body-stap__num {
+        font-size: 16px;
+    }
+
+    .body-stap__down-line {
+        height: 20px;
+    }
+
+    .body-staps-wrapper__staps-col {}
+
+    .body-stap__row {
+        justify-content: center;
+    }
+
+    .body-stap__down-line {
+        margin-left: calc(50% - 2px);
+    }
+
+    .body-main-data {
+        width: calc(100% - 120px - 20px);
+    }
+
+    .stap-counter__title {
+        font-size: 24px;
+    }
+
+    .body-main-data {
+        padding: 30px;
+    }
+
+    .model-3d {
+        height: 400px;
+        margin-top: 30px;
+    }
+
+    .trailer-size__element {
+        width: calc(20% - 15px);
+        margin: 0 7px 15px 7px;
+        font-size: 14px;
+    }
+
+    .trailer-size__element--33 {
+        width: calc(33.33% - 15px);
+        margin: 0 7px 15px 7px;
+    }
+
+    .choice-element--33 {
+        width: calc(50% - 15px);
+        margin: 0 7px 15px 7px;
+    }
+
+    .choice-element .trailer-size__element-title {
+        font-size: 14px;
+    }
+
+    .get-quote {
+        padding: 30px;
+    }
+
+    .get-quote__body {
+        margin-top: 30px;
+        flex-wrap: wrap;
+    }
+
+    .selections__title {
+        font-size: 24px;
+        margin-bottom: 30px;
+    }
+
+    .order-form__title {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .selections {
+        width: 100%;
+    }
+
+    .order-form {
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .order-form__down-controll .body-staps-wrapper__btn--prev {
+        margin-bottom: 0;
+    }
+
+    .builder-sec {
+        padding-bottom: 40px;
+    }
+
+    .get-quote__header-title {
+        font-size: 28px;
+    }
+
+    .get-quote__header-subtitle {
+        font-size: 14px;
+    }
+}
+
+@media only screen and (max-width: 760px) {
+
+    .container-builder {
+        width: 350px;
+    }
+
+    .container-header {
+        width: 350px;
+    }
+
+    .header__contact span {
+        display: none;
+    }
+
+    .header__down {
+        padding: 15px 0;
+    }
+
+    .header__btn {
+        padding: 10px 20px;
+    }
+
+    .header__btn span {
+        font-size: 13px;
+    }
+
+    .builder-sec__header {
+        padding: 20px 15px;
+    }
+
+    .builder-sec__title {
+        font-size: 22px;
+    }
+
+    .builder-header-stap__name {
+        font-size: 12px;
+    }
+
+    .builder-sec__body {
+        flex-wrap: wrap;
+    }
+
+    .body-main-data {
+        width: 100%;
+    }
+
+    .body-main-data {
+        padding: 20px 15px;
+    }
+
+    .stap-counter__title {
+        font-size: 20px;
+        margin-left: 15px;
+    }
+
+    .model-3d {
+        margin-top: 20px;
+        height: 300px;
+        border-radius: 10px;
+    }
+
+    .trailer-size {
+        width: calc(100% + 10px);
+        margin-left: -5px;
+    }
+
+    .trailer-size__element {
+        width: calc(33.33% - 10px);
+        height: 35px;
+        font-size: 13px;
+        margin: 0 5px 10px 5px;
+    }
+
+    .body-staps-wrapper {
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .body-staps-wrapper__staps-col {
+        display: flex;
+        justify-content: center;
+    }
+
+    .body-stap__down-line {
+        display: none;
+    }
+
+    .body-stap__num {
+        font-size: 14px;
+        width: 35px;
+        height: 35px;
+        margin: 0;
+    }
+
+    .body-stap {
+        margin: 0 5px
+    }
+
+    .body-staps-wrapper {
+        padding: 20px 15px;
+    }
+
+    .trailer-size__element--33 {
+        width: calc(100% - 10px);
+        height: auto;
+        min-height: 35px;
+    }
+
+    .trailer-size__element-cost {
+        font-size: 13px;
+    }
+
+    .choice-element--50,
+    .choice-element--33 {
+        width: calc(100% - 10px);
+        margin: 0 5px 10px 5px;
+    }
+
+    .get-quote__header-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .get-quote__header-title {
+        font-size: 24px;
+    }
+
+    .get-quote__header-subtitle {
+        margin-top: 13px;
+    }
+
+    .get-quote {
+        padding: 20px 15px;
+    }
+
+    .selections__title {
+        font-size: 22px;
+    }
+
+    .selections__table-title {
+        font-size: 13px;
+    }
+
+    .selections__table {
+        padding: 15px;
+    }
+
+    .selections__table-name {
+        font-size: 13px;
+    }
+
+    .selections__table-value {
+        font-size: 13px;
+        text-align: right;
+    }
+
+    .order-form__title {
+        font-size: 22px;
+        margin-bottom: 15px;
+    }
+
+    .order-form {
+        padding: 20px 15px;
+    }
+
+    .selections {
+        padding: 20px 15px;
+    }
+
+    .order-form__input {
+        width: 100%;
+    }
+
+    .order-form__input-wrapper input {
+        font-size: 12px;
+        padding: 14px;
+    }
+
+    .order-form__input-title {
+        font-size: 13px;
+    }
+
+    .order-form__down-controll .body-staps-wrapper__btn--prev {
+        order: 2;
+        width: 100%;
+    }
+
+    .order-form__send-offer {
+        margin: 0 0 10px;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .order-form__down-controll-total-price {
+        width: 100%;
+        text-align: center;
+    }
 }

@@ -27,7 +27,7 @@
                     </div>
                     
                     <div class="choice-element__data">
-                        <p class="trailer-size__element-title">{{ item.title_value }}</p>
+                        <p class="trailer-size__element-title trailer-size__element-title-smaller">{{ item.title_value }}</p>
                         <p class="trailer-size__element-subtitle">{{ item.subtitle }}</p>
                         <p class="trailer-size__element-cost">{{ item.price }}</p>
                     </div>

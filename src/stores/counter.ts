@@ -57,6 +57,7 @@ export const useCounterStore = defineStore('counter', () => {
         'title': 'Frame Material',
         'currentIndex': null,
         'priceValue': null,
+        'procentValue': null,
       },
       'stap7': {
         'title': 'Axle & Suspension',

@@ -61,40 +61,28 @@ const currentModel = ref(null)
 const selectCurrentSize = (item, index)=>{
     activeIndex.value = index
 
-    // if(item.model?.url){
-    // currentModel.value = item.model.url
-    // }
-    // else{
-    // currentModel.value = trailerModel_7x12
-    // }
 
-    console.log(currentModel.value)
-
-    sizeList.value[index].selected = !sizeList.value[index].selected
-
+    
+       sizeList.value[index].selected = !sizeList.value[index].selected
 
 
     let arraySizeList = sizeList.value
     let valueStoreArray = []
 
-    for(let i = 0; i < sizeList.value.length; i++){
-        if(+i != +index){
-            sizeList.value[i].selected = false
-            console.log('gg')
+    for(let i = 0; i < arraySizeList.length; i++){
+
+        if(arraySizeList[i].selected == true){
+            let object = {
+                'currentIndex': +i,
+                'priceValue': arraySizeList[i].price_value,
+                'title': arraySizeList[i].title_value
+
+            }
+            valueStoreArray.push(object)
         }
-        console.log(sizeList.value[i].selected, i, index)
+
     }
 
-
-    if(sizeList.value[index].selected == true){
-        let object = {
-            'currentIndex': +index,
-            'priceValue': item.price_value,
-            'title': item.title_value
-
-        }
-        valueStoreArray.push(object)
-    }
     store.stapsMemory.stap3_Equipment.stap3.selectedElements = valueStoreArray
 
     console.log(store.stapsMemory)

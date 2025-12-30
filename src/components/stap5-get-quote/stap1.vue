@@ -130,7 +130,7 @@
             <div class="order-form__down-controll">
     
                 <p class="order-form__down-controll-total-price">
-                    <!-- Toral price: <span>{{ Math.floor(totalPriceClient) }}$</span> -->
+                    Toral price: <span>{{ Math.floor(totalPriceClient) }}$</span>
                 </p>
               
 
@@ -163,6 +163,8 @@
                 </p>
                 
             </div>
+
+            
         </div>
     </div>
    </div>
@@ -226,12 +228,18 @@
     let bysinessMarginProcent = +store.dataServer.configuration.business_margin / 100
 
     let sizePriceValue = +store.stapsMemory.stap1_Foundation.stap1.priceValue
+
+    let FrameMaterialValue = +store.stapsMemory.stap1_Foundation.stap6.procentValue
     
-    let trailerStyleTitle = store.stapsMemory.stap1_Foundation.stap2.titleValue
+    let trailerStyleTitle = +store.stapsMemory.stap1_Foundation.stap2.titleValue
 
     if(trailerStyleTitle == 'Airstream (Curved)'){
         console.log(trailerStyleTitle)
         sizePriceValue = +sizePriceValue * 1.2
+    }
+
+    if(FrameMaterialValue && FrameMaterialValue != 0){
+        sizePriceValue = +sizePriceValue * (1 + (+FrameMaterialValue / 100))
     }
 
     let axleSuspensionPrice = +store.stapsMemory.stap1_Foundation.stap7.priceValue
@@ -422,7 +430,7 @@ _________
     formData.append("text_description", formText.value);
     formData.append("config_field",  config1Text + config2 + rowX);
 
-    
+    submitToHubSpot(config1Text, config2)
     
 
     fetch("https://stcroixtrailers.theprojectview.com/wp-json/contact-form-7/v1/contact-forms/319/feedback", {
@@ -437,6 +445,8 @@ _________
     .then(data => {
         console.log(data)
         // alert('request was sent')
+
+     
         store.changePopupCurrent('popup-done')
         formFirstName.value = ''
         formLastName.value = ''
@@ -444,12 +454,68 @@ _________
         formPhone.value = ''
         formBusinessName.value = ''
         formText.value = ''
+        
 
     })
     .catch(err => {
         alert(err)
         console.error(err)
     });
+
+
+    
+}
+
+
+
+
+
+const submitToHubSpot = async (dataConfig, config2) => {
+  const payload = {
+    fields: [
+      { name: "email", value: formEmail.value || "" },
+      { name: "firstname", value: formFirstName.value || "" },
+      { name: "lastname", value: formLastName.value || "" },
+      { name: "phone", value: formPhone.value || "" },
+      { name: "company", value: formBusinessName.value || "" },
+      { name: "message", value: formText.value || "" },
+      { name: "trailer_size_value", value: trailerSize.value || "" },
+      { name: "material_cost", value: materialCost.value || "" },
+      { name: "build_cost", value: buildCost.value || "" },
+      { name: "total_cost_owner", value: totalPrice.value || "" },
+      { name: "total_cost_client", value: totalPriceClient.value || "" },
+      { name: "trailer_config", value: dataConfig + config2 },
+      
+      
+      // Если новые поля добавлены в HubSpot, добавь их здесь с правильным internal name
+    ],
+    context: {
+      pageUri: window.location.href,
+      pageName: document.title
+    }
+  }
+
+  console.log(payload)
+
+  try {
+    const res = await fetch(
+      'https://api.hsforms.com/submissions/v3/integration/submit/243152297/5c3a1ffe-aed3-4aa3-ba0d-7c4ca0d9eea1',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      }
+    )
+
+    if (res.ok) {
+      console.log('Данные отправлены в HubSpot ✅')
+    } else {
+      const text = await res.text()
+      console.error('Ошибка отправки', res.status, text)
+    }
+  } catch (err) {
+    console.error('Ошибка запроса', err)
+  }
 }
 
 

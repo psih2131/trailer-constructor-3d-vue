@@ -43,21 +43,22 @@ const currentModel = ref(null)
 
 //METHODS
 const selectCurrentSize = (item, index)=>{
-activeIndex.value = index
+    activeIndex.value = index
 
-// if(item.model?.url){
-// currentModel.value = item.model.url
-// }
-// else{
-// currentModel.value = trailerModel_7x12
-// }
+    // if(item.model?.url){
+    // currentModel.value = item.model.url
+    // }
+    // else{
+    // currentModel.value = trailerModel_7x12
+    // }
 
-console.log(currentModel.value)
+    console.log(currentModel.value)
 
-store.stapsMemory.stap1_Foundation.stap6.currentIndex = index
-store.stapsMemory.stap1_Foundation.stap6.priceValue = item.price_value
+    store.stapsMemory.stap1_Foundation.stap6.currentIndex = index
+    store.stapsMemory.stap1_Foundation.stap6.priceValue = item.price_value
+    store.stapsMemory.stap1_Foundation.stap6.procentValue = item.procent_value
 
-console.log(store.stapsMemory)
+    console.log(store.stapsMemory)
 }
 
 
@@ -90,6 +91,7 @@ onMounted(()=>{
         store.stapsMemory.stap1_Foundation.stap6.currentIndex = 0
         
         store.stapsMemory.stap1_Foundation.stap6.priceValue = store.dataServer.foundation.stap_6[0].price_value
+        store.stapsMemory.stap1_Foundation.stap6.procentValue = store.dataServer.foundation.stap_6[0].procent_value
     }
 
     //current model

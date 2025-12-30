@@ -62,7 +62,7 @@ const currentModel = ref(null)
 
 //METHODS
 const selectCurrentSize = (item, index)=>{
-    activeIndex.value = index
+   activeIndex.value = index
 
     // if(item.model?.url){
     // currentModel.value = item.model.url
@@ -79,23 +79,18 @@ const selectCurrentSize = (item, index)=>{
     let arraySizeList = sizeList.value
     let valueStoreArray = []
 
-    for(let i = 0; i < sizeList.value.length; i++){
-        if(+i != +index){
-            sizeList.value[i].selected = false
-            console.log('gg')
+    for(let i = 0; i < arraySizeList.length; i++){
+
+        if(arraySizeList[i].selected == true){
+            let object = {
+                'currentIndex': +i,
+                'priceValue': arraySizeList[i].price_value,
+                'title': arraySizeList[i].title_value
+
+            }
+            valueStoreArray.push(object)
         }
-        console.log(sizeList.value[i].selected, i, index)
-    }
 
-
-    if(sizeList.value[index].selected == true){
-        let object = {
-            'currentIndex': +index,
-            'priceValue': item.price_value,
-            'title': item.title_value
-
-        }
-        valueStoreArray.push(object)
     }
     store.stapsMemory.stap4_AddOns.stap2.selectedElements = valueStoreArray
 

@@ -58,42 +58,29 @@ const sizeList = ref(null)
 
 const currentModel = ref(null)
 
-//METHODS
-const selectCurrentSize = (item, index)=>{
+const selectCurrentSize = (item, index) => {
+    const selectedCount = sizeList.value.filter(el => el.selected).length
+
+    // если элемент НЕ выбран и уже выбрано 3 — выходим
+    if (!sizeList.value[index].selected && selectedCount >= 3) {
+        console.warn('Можно выбрать максимум 3 элемента')
+        return
+    }
+
     activeIndex.value = index
-
-    // if(item.model?.url){
-    // currentModel.value = item.model.url
-    // }
-    // else{
-    // currentModel.value = trailerModel_7x12
-    // }
-
-    console.log(currentModel.value)
-
     sizeList.value[index].selected = !sizeList.value[index].selected
 
+    const valueStoreArray = sizeList.value
+        .map((el, i) => el.selected ? ({
+            currentIndex: i,
+            priceValue: el.price_value,
+            title: el.title_value
+        }) : null)
+        .filter(Boolean)
 
-    let arraySizeList = sizeList.value
-    let valueStoreArray = []
-
-    for(let i = 0; i < arraySizeList.length; i++){
-
-        if(arraySizeList[i].selected == true){
-            let object = {
-                'currentIndex': +i,
-                'priceValue': arraySizeList[i].price_value,
-                'title': arraySizeList[i].title_value
-
-            }
-            valueStoreArray.push(object)
-        }
-
-    }
     store.stapsMemory.stap3_Equipment.stap1.selectedElements = valueStoreArray
-
-    console.log(store.stapsMemory)
 }
+
 
 
 //HOOKS

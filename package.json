@@ -14,6 +14,7 @@
     "type-check": "vue-tsc --build"
   },
   "dependencies": {
+    "@formcrafts/embed": "^1.0.38",
     "@google/model-viewer": "^4.1.0",
     "pinia": "^3.0.4",
     "vue": "^3.5.22",
