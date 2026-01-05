@@ -88,19 +88,19 @@
                     
                     <template v-for="(value, index) in store.stapsMemory.stap2_Utilities" :key="index">
                         <div class="selections__table-row" v-for="item in value.selectedElements">
-                            <p class="selections__table-value">- {{ item.title}}</p>
+                            <p class="selections__table-value" :data-price="item.priceValue">- {{ item.title}}</p>
                         </div>
                     </template>
 
                     <template v-for="(value, index) in store.stapsMemory.stap3_Equipment" :key="index">
                         <div class="selections__table-row" v-for="item in value.selectedElements">
-                            <p class="selections__table-value">- {{ item.title}}</p>
+                            <p class="selections__table-value" :data-price="item.priceValue">- {{ item.title}}</p>
                         </div>
                     </template>
 
                     <template v-for="(value, index) in store.stapsMemory.stap4_AddOns" :key="index">
                         <div class="selections__table-row" v-for="item in value.selectedElements">
-                            <p class="selections__table-value">- {{ item.title}}</p>
+                            <p class="selections__table-value" :data-price="item.priceValue">- {{ item.title}}</p>
                         </div>
                     </template>
 
@@ -376,33 +376,40 @@ function validEmail(email) {
 
 
 function sendForm() {
-let config1Text = `_
-
-_________
-
-
+let config1Text = ` 
+${'⠀'}
 Trailer info:
+${'⠀'}
 
-${store.stapsMemory.stap1_Foundation.stap1.title}: ${store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].title_value}
-${store.stapsMemory.stap1_Foundation.stap2.title}: ${store.dataServer.foundation.stap_2[+store.stapsMemory.stap1_Foundation.stap2.currentIndex].title_value}
-${store.stapsMemory.stap1_Foundation.stap3.title}: ${store.dataServer.foundation.stap_3[+store.stapsMemory.stap1_Foundation.stap3.currentIndex].title_value}
+${store.stapsMemory.stap1_Foundation.stap1.title}: ${store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].title_value} - $${store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].price_value}
+${store.stapsMemory.stap1_Foundation.stap2.title}: ${store.dataServer.foundation.stap_2[+store.stapsMemory.stap1_Foundation.stap2.currentIndex].title_value} 
+${store.stapsMemory.stap1_Foundation.stap3.title}: ${store.dataServer.foundation.stap_3[+store.stapsMemory.stap1_Foundation.stap3.currentIndex].title_value} 
 ${store.stapsMemory.stap1_Foundation.stap4.title}: ${store.dataServer.foundation.stap_4[+store.stapsMemory.stap1_Foundation.stap4.currentIndex].title_value}
-${store.stapsMemory.stap1_Foundation.stap5.title}: ${store.dataServer.foundation.stap_5[+store.stapsMemory.stap1_Foundation.stap5.currentIndex].title_value}
-${store.stapsMemory.stap1_Foundation.stap6.title}: ${store.dataServer.foundation.stap_6[+store.stapsMemory.stap1_Foundation.stap6.currentIndex].title_value}
-${store.stapsMemory.stap1_Foundation.stap7.title}: ${store.dataServer.foundation.stap_7[+store.stapsMemory.stap1_Foundation.stap7.currentIndex].title_value}
+${store.stapsMemory.stap1_Foundation.stap5.title}: ${store.dataServer.foundation.stap_5[+store.stapsMemory.stap1_Foundation.stap5.currentIndex].title_value} 
+${store.stapsMemory.stap1_Foundation.stap6.title}: ${store.dataServer.foundation.stap_6[+store.stapsMemory.stap1_Foundation.stap6.currentIndex].title_value} 
+${store.stapsMemory.stap1_Foundation.stap7.title}: ${store.dataServer.foundation.stap_7[+store.stapsMemory.stap1_Foundation.stap7.currentIndex].title_value} - $${store.dataServer.foundation.stap_7[+store.stapsMemory.stap1_Foundation.stap7.currentIndex].price_value}
 
-_________
-
+${'⠀'}
+${'⠀'}
+${'⠀'}
 
 Equipment & Add-ons:
-
+${'⠀'}
 `
 // let config1 = document.querySelector('.selections .selections__table').innerText 
 
-let config2 = document.querySelector('.eqyip-table .selections__table').innerText 
+let config2 = ""
+let allConfigTextElement = document.querySelectorAll('.eqyip-table .selections__table-value') 
+
+allConfigTextElement.forEach(element => {
+    let currentTitle = element.innerHTML
+    let priceCurrent = element.getAttribute('data-price')
+    let valueConfigString = currentTitle + " - " + "$"+priceCurrent + "\n"
+    config2 = config2 + valueConfigString
+});
 
 let rowX = `
-_________
+
 
 `
     console.log(config1Text)
@@ -417,18 +424,18 @@ _________
     // formData.append("_wpcf7_container_post", "0");
     // formData.append("_wpcf7_posted_data_hash", "");
 
-    formData.append("trailer_size", trailerSize.value);
-    formData.append("material_cost", materialCost.value);
-    formData.append("build_cost", buildCost.value);
-    formData.append("total_cost_owner", totalPrice.value);
-    formData.append("total_cost_client", totalPriceClient.value);
-    formData.append("first_name", formFirstName.value);
-    formData.append("last_name", formLastName.value);
-    formData.append("email_client", formEmail.value);
-    formData.append("tel_client", formPhone.value);
-    formData.append("business_name", formBusinessName.value);
-    formData.append("text_description", formText.value);
-    formData.append("config_field",  config1Text + config2 + rowX);
+    formData.append("trailer size", trailerSize.value);
+    formData.append("material cost", materialCost.value);
+    formData.append("build cost", buildCost.value);
+    formData.append("total cost owner", totalPrice.value);
+    formData.append("total cost client", totalPriceClient.value);
+    formData.append("first name", formFirstName.value);
+    formData.append("last name", formLastName.value);
+    formData.append("email client", formEmail.value);
+    formData.append("tel client", formPhone.value);
+    formData.append("business name", formBusinessName.value);
+    formData.append("text description", formText.value);
+    formData.append("config field",  config1Text +"\n"+"\n" + config2 + rowX);
 
     submitToHubSpot(config1Text, config2)
     
@@ -473,18 +480,19 @@ _________
 const submitToHubSpot = async (dataConfig, config2) => {
   const payload = {
     fields: [
+      
       { name: "email", value: formEmail.value || "" },
       { name: "firstname", value: formFirstName.value || "" },
       { name: "lastname", value: formLastName.value || "" },
       { name: "phone", value: formPhone.value || "" },
       { name: "company", value: formBusinessName.value || "" },
       { name: "message", value: formText.value || "" },
-      { name: "trailer_size_value", value: trailerSize.value || "" },
-      { name: "material_cost", value: materialCost.value || "" },
+      { name: "trailer size value", value: trailerSize.value || "" },
+      { name: "material cost", value: materialCost.value || "" },
       { name: "build_cost", value: buildCost.value || "" },
-      { name: "total_cost_owner", value: totalPrice.value || "" },
-      { name: "total_cost_client", value: totalPriceClient.value || "" },
-      { name: "trailer_config", value: dataConfig + config2 },
+      { name: "total cost owner", value: totalPrice.value || "" },
+      { name: "total cost client", value: totalPriceClient.value || "" },
+      { name: "trailer config", value: dataConfig  +"\n"+"\n" + config2 },
       
       
       // Если новые поля добавлены в HubSpot, добавь их здесь с правильным internal name
