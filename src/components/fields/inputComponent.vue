@@ -2,7 +2,7 @@
     <div class="order-form__input" :class="{'order-form__input--long': longStatus== true}">
         <p class="order-form__input-title" v-if="title" v-html="title"></p>
         <div class="order-form__input-wrapper" :class="{'order-form__input-wrapper--error': validStatus == false}">
-            <input type="text" placeholder="John" 
+            <input type="text" :placeholder="placeholderField" 
             :value="modelValue"
             @input="emit('update:modelValue', $event.target.value)">
 
@@ -25,6 +25,7 @@ defineProps({
         default: null
     },
     inputType: String,
+    placeholderField: String,
 
 })
 

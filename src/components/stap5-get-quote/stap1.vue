@@ -113,24 +113,24 @@
 
             <div class="order-form__wrapper">
 
-                <inputComponent :title="'First name *'" v-model="formFirstName" :inputType="'text'" :validStatus="formFirstNameValidStatus"/>
+                <inputComponent :placeholderField="'John'" :title="'First name *'" v-model="formFirstName" :inputType="'text'" :validStatus="formFirstNameValidStatus"/>
 
-                <inputComponent :title="'Last Name *'" v-model="formLastName" :inputType="'text'" :validStatus="formLastNameValidStatus"/>
+                <inputComponent :placeholderField="'Anderson'" :title="'Last Name *'" v-model="formLastName" :inputType="'text'" :validStatus="formLastNameValidStatus"/>
 
-                <inputComponent :title="'Email Address *'" v-model="formEmail" :inputType="'email'" :validStatus="formEmailValidStatus"/>
+                <inputComponent :placeholderField="'email@domain.com'" :title="'Email Address *'" v-model="formEmail" :inputType="'email'" :validStatus="formEmailValidStatus"/>
 
-                <inputComponent :title="'Phone Number *'" v-model="formPhone" :inputType="'phone'" :validStatus="formPhoneValidStatus"/>
+                <inputComponent :placeholderField="'+1 202 555 0147'" :title="'Phone Number *'" v-model="formPhone" :inputType="'phone'" :validStatus="formPhoneValidStatus"/>
 
-                <inputComponent :title="'Business Name (Optional)'" :longStatus="true" v-model="formBusinessName"/>
+                <inputComponent :placeholderField="'Name company'" :title="'Business Name (Optional)'" :longStatus="true" v-model="formBusinessName"/>
 
-                <inputComponent :title="'Additional Requirements or Questions'" :longStatus="true" v-model="formText"/>
+                <inputComponent :placeholderField="'Some questions'" :title="'Additional Requirements or Questions'" :longStatus="true" v-model="formText"/>
 
             </div>
 
             <div class="order-form__down-controll">
     
                 <p class="order-form__down-controll-total-price">
-                    Toral price: <span>{{ Math.floor(totalPriceClient) }}$</span>
+                    <!-- Toral price: <span>{{ Math.floor(totalPriceClient) }}$</span> -->
                 </p>
               
 
