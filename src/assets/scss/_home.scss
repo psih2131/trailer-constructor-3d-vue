@@ -320,6 +320,7 @@
     font-size: 12px;
     font-style: normal;
     font-weight: 400;
+
 }
 
 .trailer-size__element-cost {
@@ -329,6 +330,9 @@
     font-size: 16px;
     font-style: normal;
     font-weight: 700;
+    position: absolute;
+    bottom: 0;
+    left: 16px;
 
 }
 
@@ -414,6 +418,9 @@
 .choice-element__data {
     width: calc(100% - 25px);
     padding-left: 16px;
+    padding-bottom: 27px;
+    height: 100%;
+    position: relative;
 }
 
 .hoice-element__input {
@@ -1158,6 +1165,10 @@
 
     .trailer-size__element-cost {
         font-size: 13px;
+        position: relative;
+        left: auto;
+        bottom: auto;
+        margin-top: 5px;
     }
 
     .choice-element--50,
@@ -1244,5 +1255,10 @@
     .order-form__down-controll-total-price {
         width: 100%;
         text-align: center;
+    }
+
+    .choice-element__data {
+        padding-bottom: 0;
+        height: auto;
     }
 }
