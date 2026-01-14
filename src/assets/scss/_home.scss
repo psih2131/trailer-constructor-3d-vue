@@ -310,6 +310,13 @@
     flex-wrap: wrap;
     height: auto;
     padding: 15px 0;
+    position: relative;
+
+    .trailer-size__element-cost {
+        position: relative;
+        left: auto;
+        top: auto;
+    }
 }
 
 .trailer-size__element-subtitle {

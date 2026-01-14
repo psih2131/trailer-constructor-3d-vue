@@ -1,6 +1,5 @@
 <template>
-  <main>
-   <header class="header">
+ <header class="header">
 
 			<div class="header__top">
 				<div class="container-header">
@@ -83,9 +82,13 @@
 				</div>
 			</div>
 
-		</header>
+</header>
 
-		<main class="main" id="app">
+
+  <main>
+   
+
+		<main class="main" >
 			<section class="builder-sec">
 				<div class="container-builder">
 					

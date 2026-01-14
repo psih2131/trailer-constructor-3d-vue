@@ -379,7 +379,6 @@ function sendForm() {
 let config1Text = ` 
 ${'⠀'}
 Trailer info:
-${'⠀'}
 
 ${store.stapsMemory.stap1_Foundation.stap1.title}: ${store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].title_value} - $${store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].price_value}
 ${store.stapsMemory.stap1_Foundation.stap2.title}: ${store.dataServer.foundation.stap_2[+store.stapsMemory.stap1_Foundation.stap2.currentIndex].title_value} 
@@ -390,11 +389,7 @@ ${store.stapsMemory.stap1_Foundation.stap6.title}: ${store.dataServer.foundation
 ${store.stapsMemory.stap1_Foundation.stap7.title}: ${store.dataServer.foundation.stap_7[+store.stapsMemory.stap1_Foundation.stap7.currentIndex].title_value} - $${store.dataServer.foundation.stap_7[+store.stapsMemory.stap1_Foundation.stap7.currentIndex].price_value}
 
 ${'⠀'}
-${'⠀'}
-${'⠀'}
-
 Equipment & Add-ons:
-${'⠀'}
 `
 // let config1 = document.querySelector('.selections .selections__table').innerText 
 
@@ -418,11 +413,11 @@ let rowX = `
 
     // скрытые поля
     formData.append("_wpcf7", "319");
-    // formData.append("_wpcf7_version", "6.1.4");
+    formData.append("_wpcf7_version", "6.1.4");
     formData.append("_wpcf7_locale", "en_US");
     formData.append("_wpcf7_unit_tag", "wpcf7-f319-o2");
-    // formData.append("_wpcf7_container_post", "0");
-    // formData.append("_wpcf7_posted_data_hash", "");
+    formData.append("_wpcf7_container_post", "0");
+    formData.append("_wpcf7_posted_data_hash", "");
 
     formData.append("trailer size", trailerSize.value);
     formData.append("material cost", materialCost.value);
@@ -435,7 +430,7 @@ let rowX = `
     formData.append("tel client", formPhone.value);
     formData.append("business name", formBusinessName.value);
     formData.append("text description", formText.value);
-    formData.append("config field",  config1Text +"\n"+"\n" + config2 + rowX);
+    formData.append("config field",  config1Text +"\n" + config2 + rowX);
 
     submitToHubSpot(config1Text, config2)
     
