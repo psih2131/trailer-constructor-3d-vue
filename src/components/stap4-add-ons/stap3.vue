@@ -5,7 +5,19 @@
 
         <div class="trailer-size">
 
-            <template v-for="(item,index) in sizeList">
+            <template v-if="clasterList?.length > 0">
+
+                <template v-for="(item,index) in clasterList">
+                    <selectCluster  
+                    :arrayData="item.claster" 
+                    :titleClaster="item.title_value" 
+                    :typeSelect="typeSelect(item.claster_title)"
+                    @selectedArray="changeSelectedData($event,index)" />
+                </template>
+                
+            </template>
+
+            <!-- <template v-for="(item,index) in sizeList">
                 <div class="trailer-size__choice-element choice-element choice-element--33" 
                 :class="{'active':item.selected == true}"
                 @click="selectCurrentSize(item,index)"
@@ -32,7 +44,7 @@
                     </div>
 
                 </div>
-            </template>
+            </template> -->
 
         </div>
     </div>
@@ -47,6 +59,8 @@ import { ref, onMounted, onBeforeUnmount, computed, watch , defineEmits } from '
 
 import modelViewer from '@/components/model-view.vue'
 
+import selectCluster from '@/components/sub-staps/select-cluster.vue'
+
 import trailerModel_7x12 from '@/assets/models/models-3d/7x12_Square_Trailer.glb?url';
 
 
@@ -57,78 +71,92 @@ const activeIndex = ref(null)
 
 const sizeList = ref(null)
 
+const clasterList = ref(null)
+
 const currentModel = ref(null)
 
 //METHODS
-const selectCurrentSize = (item, index)=>{
-    activeIndex.value = index
+function typeSelect(data){
 
-    // if(item.model?.url){
-    // currentModel.value = item.model.url
-    // }
-    // else{
-    // currentModel.value = trailerModel_7x12
-    // }
-
-    console.log(currentModel.value)
-
-    sizeList.value[index].selected = !sizeList.value[index].selected
-
-
-    let arraySizeList = sizeList.value
-    let valueStoreArray = []
-
-    for(let i = 0; i < arraySizeList.length; i++){
-
-        if(arraySizeList[i].selected == true){
-            let object = {
-                'currentIndex': +i,
-                'priceValue': arraySizeList[i].price_value,
-                'title': arraySizeList[i].title_value
-
-            }
-            valueStoreArray.push(object)
-        }
-
+    console.log(data)
+    let tupeSelectValue
+    if(data == 'other options'){
+        tupeSelectValue = 'many'
     }
-    store.stapsMemory.stap4_AddOns.stap3.selectedElements = valueStoreArray
+    else{
+        tupeSelectValue = 'one'
+    }
 
-    console.log(store.stapsMemory)
+    return tupeSelectValue
+}
+
+
+function changeSelectedData(data, index){
+    console.log(changeSelectedData,data, index)
+
+     store.stapsMemory.stap4_AddOns.stap3.selectedElementsArray[index] = data
+     console.log(store.stapsMemory)
 }
 
 
 //HOOKS
 onMounted(()=>{
 
-    sizeList.value = store.dataServer['add-ons'].stap_3
-
-    sizeList.value.forEach(item => {
-        item.selected = false
+    clasterList.value = store.dataServer['add-ons'].stap_3
+    clasterList.value.forEach(item =>{
+        item.claster.forEach(element =>{
+            element.selected = false
+        })
     })
 
-    activeIndex.value = 0
-    
-    // if(sizeList.value[0].model?.url){
-    //     currentModel.value = sizeList.value[0].model.url
-    // }
-    // else{
-    //     currentModel.value = trailerModel_7x12
-    // }
+    console.log('clasterList', clasterList.value)
 
 
+    if(store.stapsMemory.stap4_AddOns.stap3.selectedElementsArray.length > 0){
+        //если это не первая загрузка шага и там уже есть масив с кластеров пустой или выбраными элементами
+        let storeSelectedArrays = store.stapsMemory.stap4_AddOns.stap3.selectedElementsArray
 
-    if(store.stapsMemory.stap4_AddOns.stap3.selectedElements.length > 0){
 
-        let arraySelectedListStore = store.stapsMemory.stap4_AddOns.stap3.selectedElements
+        //прогоняем через цыкл кластеры
+        for(let i = 0; i < storeSelectedArrays.length; i++){
 
-        for(let i = 0; i < arraySelectedListStore.length; i++){
-            let indexCurrent = +arraySelectedListStore[i].currentIndex
-            sizeList.value[indexCurrent].selected = true
+            let arraySelectedListStore = storeSelectedArrays[i]
+
+            //каждый кластер прверяем на наличие элементов
+            if(arraySelectedListStore.length > 0){
+                //если он не пустой то тогда передаем в копоненты выбраные элементы
+                for(let x = 0; x < arraySelectedListStore.length; x++){
+                let indexCurrent = +arraySelectedListStore[x].currentIndex
+                console.log(clasterList.value[i], indexCurrent)
+                clasterList.value[i].claster[indexCurrent].selected = true
+            }
+
+            }
+            else{
+                clasterList.value[i]
+                store.stapsMemory.stap4_AddOns.stap3.selectedElementsArray[i] = []
+            }
         }
+
     }
     else{
-        store.stapsMemory.stap4_AddOns.stap3.selectedElements = []
+        //если это первая загрузка этого шага и еще ничего не выбрано то мы 
+        // создаем пустые масивы в сторе для этого шага в зависимости от количества кластеров заполненых в админке
+        let arraysServerCluster = store.dataServer['add-ons'].stap_3
+        let emptyArrayStore = []
+        for(let i = 0; i < arraysServerCluster.length; i++){
+            let newArrayCreate = []
+            emptyArrayStore.push(newArrayCreate)
+        }
+        
+        store.stapsMemory.stap4_AddOns.stap3.selectedElementsArray = emptyArrayStore
+
+       
     }
+    console.log(store.stapsMemory.stap4_AddOns.stap3)
+
+
+
 
     //current model
     

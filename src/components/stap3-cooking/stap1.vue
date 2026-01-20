@@ -29,7 +29,24 @@
                     <div class="choice-element__data">
                         <p class="trailer-size__element-title">{{ item.title_value }}</p>
                         <p class="trailer-size__element-subtitle">{{ item.subtitle }}</p>
-                        <p class="trailer-size__element-cost">{{ item.price }}</p>
+
+                        <div class="choice-element__count" v-if="item.counter && +item.counter != 0 && item.selected == true" >
+                            <p class="choice-element__count-text">Quantity</p>
+                            <input  type="number"
+                            class="choice-element__count-field"
+                            min="1"
+                            step="1"
+                            :value="+item.quantity"
+                            inputmode="numeric"
+                            pattern="[0-9]*"
+                            @click.stop
+                            @input="onInput($event, +item.counter),changeCounter($event,item,index)">
+                        </div>
+
+                        <p class="trailer-size__element-cost">
+                            {{ item.price }}
+                        </p>
+                        
                     </div>
 
                 </div>
@@ -58,6 +75,40 @@ const sizeList = ref(null)
 
 const currentModel = ref(null)
 
+const onInput = (e, maxValue) => {
+  let value = e.target.value
+
+  // оставляем только цифры
+  value = value.replace(/\D+/g, '')
+
+  // если пусто — ставим 1
+  if (!value) {
+    value = '1'
+  }
+
+  let number = Number(value)
+
+  // минимальное значение
+  if (number < 1) number = 1
+
+  // максимальное значение
+  if (number > maxValue) number = maxValue
+
+  e.target.value = number
+}
+
+
+function changeCounter(event,item,index){
+    let value = event.target.value
+
+      let currentStapStore = store.stapsMemory.stap3_Equipment.stap1.selectedElements        
+      let element = currentStapStore.find(el => el.title === item.title_value)
+      element.quantity = +value
+      console.log('sosi', element)
+
+      console.log('store.stapsMemory', store.stapsMemory)
+}
+
 const selectCurrentSize = (item, index) => {
     const selectedCount = sizeList.value.filter(el => el.selected).length
 
@@ -74,7 +125,8 @@ const selectCurrentSize = (item, index) => {
         .map((el, i) => el.selected ? ({
             currentIndex: i,
             priceValue: el.price_value,
-            title: el.title_value
+            title: el.title_value,
+            quantity: el.counter >= 1 ? 1 : 0
         }) : null)
         .filter(Boolean)
 
@@ -90,6 +142,7 @@ onMounted(()=>{
 
     sizeList.value.forEach(item => {
         item.selected = false
+        item.quantity = 0
     })
 
     activeIndex.value = 0
@@ -109,6 +162,7 @@ onMounted(()=>{
         for(let i = 0; i < arraySelectedListStore.length; i++){
             let indexCurrent = +arraySelectedListStore[i].currentIndex
             sizeList.value[indexCurrent].selected = true
+            sizeList.value[indexCurrent].quantity = +arraySelectedListStore[i].quantity || 0
         }
     }
     else{

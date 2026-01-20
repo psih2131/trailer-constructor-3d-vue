@@ -2,7 +2,7 @@
     <aside class="builder-sec__body-aside body-staps-wrapper">
 
         <div class="body-staps-wrapper__staps-col">
-            <div class="body-stap" :class="{'active': store.cookingCounter >= 1}">
+            <div class="body-stap" :class="{'active': store.cookingCounter >= 1}" @click="store.changeCookingCounter(1)"> 
                 <div class="body-stap__row">
                     <div class="body-stap__num">1</div>
                     <p class="body-stap__text">Cooking Equipment</p>
@@ -11,7 +11,7 @@
             </div>
 
 
-            <div class="body-stap" :class="{'active': store.cookingCounter >= 2}">
+            <div class="body-stap" :class="{'active': store.cookingCounter >= 2}" @click="store.changeCookingCounter(2)">
                 <div class="body-stap__row">
                     <div class="body-stap__num">2</div>
                     <p class="body-stap__text">Ventilation & Climate</p>
@@ -19,7 +19,7 @@
                 <div class="body-stap__down-line"></div>
             </div>
 
-            <div class="body-stap" :class="{'active': store.cookingCounter >= 3}">
+            <div class="body-stap" :class="{'active': store.cookingCounter >= 3}" @click="store.changeCookingCounter(3)">
                 <div class="body-stap__row">
                     <div class="body-stap__num">3</div>
                     <p class="body-stap__text">Warming & Holding</p>
@@ -27,7 +27,7 @@
                 <div class="body-stap__down-line"></div>
             </div>
 
-            <div class="body-stap" :class="{'active': store.cookingCounter >= 4}">
+            <div class="body-stap" :class="{'active': store.cookingCounter >= 4}" @click="store.changeCookingCounter(4)">
                 <div class="body-stap__row">
                     <div class="body-stap__num">4</div>
                     <p class="body-stap__text">Refrigeration</p>

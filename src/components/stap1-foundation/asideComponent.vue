@@ -2,7 +2,7 @@
     <aside class="builder-sec__body-aside body-staps-wrapper">
 
         <div class="body-staps-wrapper__staps-col">
-            <div class="body-stap" :class="{'active': store.foundationCounter >= 1}">
+            <div class="body-stap" :class="{'active': store.foundationCounter >= 1}" @click="store.changeFoundationCounter(1)">
                 <div class="body-stap__row">
                     <div class="body-stap__num">1</div>
                     <p class="body-stap__text">Trailer Size</p>
@@ -11,7 +11,7 @@
             </div>
 
 
-            <div class="body-stap" :class="{'active': store.foundationCounter >= 2}">
+            <div class="body-stap" :class="{'active': store.foundationCounter >= 2}" @click="store.changeFoundationCounter(2)">
                 <div class="body-stap__row">
                     <div class="body-stap__num">2</div>
                     <p class="body-stap__text">Trailer Style</p>
@@ -19,7 +19,7 @@
                 <div class="body-stap__down-line"></div>
             </div>
 
-            <div class="body-stap" :class="{'active': store.foundationCounter >= 3}">
+            <div class="body-stap" :class="{'active': store.foundationCounter >= 3}" @click="store.changeFoundationCounter(3)">
                 <div class="body-stap__row">
                     <div class="body-stap__num">3</div>
                     <p class="body-stap__text">Porch Length</p>
@@ -27,7 +27,7 @@
                 <div class="body-stap__down-line"></div>
             </div>
 
-            <div class="body-stap" :class="{'active': store.foundationCounter >= 4}">
+            <div class="body-stap" :class="{'active': store.foundationCounter >= 4}" @click="store.changeFoundationCounter(4)">
                 <div class="body-stap__row">
                     <div class="body-stap__num">4</div>
                     <p class="body-stap__text">Hitch Type</p>
@@ -35,7 +35,7 @@
                 <div class="body-stap__down-line"></div>
             </div>
 
-            <div class="body-stap" :class="{'active': store.foundationCounter >= 5}">
+            <div class="body-stap" :class="{'active': store.foundationCounter >= 5}" @click="store.changeFoundationCounter(5)">
                 <div class="body-stap__row">
                     <div class="body-stap__num">5</div>
                     <p class="body-stap__text">Interior Height</p>
@@ -43,7 +43,7 @@
                 <div class="body-stap__down-line"></div>
             </div>
 
-            <div class="body-stap" :class="{'active': store.foundationCounter >= 6}">
+            <div class="body-stap" :class="{'active': store.foundationCounter >= 6}" @click="store.changeFoundationCounter(6)">
                 <div class="body-stap__row">
                     <div class="body-stap__num">6</div>
                     <p class="body-stap__text">Frame Material</p>
@@ -51,7 +51,7 @@
                 <div class="body-stap__down-line"></div>
             </div>
 
-            <div class="body-stap" :class="{'active': store.foundationCounter >= 7}">
+            <div class="body-stap" :class="{'active': store.foundationCounter >= 7}" @click="store.changeFoundationCounter(7)">
                 <div class="body-stap__row">
                     <div class="body-stap__num">7</div>
                     <p class="body-stap__text">Axle & Suspension</p>

@@ -2,7 +2,7 @@
     <aside class="builder-sec__body-aside body-staps-wrapper">
 
         <div class="body-staps-wrapper__staps-col">
-            <div class="body-stap" :class="{'active': store.addOnsCounter >= 1}">
+            <div class="body-stap" :class="{'active': store.addOnsCounter >= 1}" @click="store.changeAddOnsCounter(1)">
                 <div class="body-stap__row">
                     <div class="body-stap__num">1</div>
                     <p class="body-stap__text">Safety & Fire Suppression</p>
@@ -11,7 +11,7 @@
             </div>
 
 
-            <div class="body-stap" :class="{'active': store.addOnsCounter >= 2}">
+            <div class="body-stap" :class="{'active': store.addOnsCounter >= 2}" @click="store.changeAddOnsCounter(2)">
                 <div class="body-stap__row">
                     <div class="body-stap__num">2</div>
                     <p class="body-stap__text">Prep & Shelving</p>
@@ -19,7 +19,7 @@
                 <div class="body-stap__down-line"></div>
             </div>
 
-            <div class="body-stap" :class="{'active': store.addOnsCounter >= 3}">
+            <div class="body-stap" :class="{'active': store.addOnsCounter >= 3}" @click="store.changeAddOnsCounter(3)">
                 <div class="body-stap__row">
                     <div class="body-stap__num">3</div>
                     <p class="body-stap__text">Exterior Add-ons</p>
@@ -27,7 +27,7 @@
                 <div class="body-stap__down-line"></div>
             </div>
 
-            <div class="body-stap" :class="{'active': store.addOnsCounter >= 4}">
+            <div class="body-stap" :class="{'active': store.addOnsCounter >= 4}" @click="store.changeAddOnsCounter(4)">
                 <div class="body-stap__row">
                     <div class="body-stap__num">4</div>
                     <p class="body-stap__text">Specialty & Marketing</p>

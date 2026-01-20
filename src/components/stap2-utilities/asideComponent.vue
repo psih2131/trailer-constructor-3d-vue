@@ -2,7 +2,7 @@
     <aside class="builder-sec__body-aside body-staps-wrapper">
 
         <div class="body-staps-wrapper__staps-col">
-            <div class="body-stap" :class="{'active': store.utilitiesCounter >= 1}">
+            <div class="body-stap" :class="{'active': store.utilitiesCounter >= 1}" @click="store.changeUtilitiesCounter(1)">
                 <div class="body-stap__row">
                     <div class="body-stap__num">1</div>
                     <p class="body-stap__text">Electrical & Power</p>
@@ -11,7 +11,7 @@
             </div>
 
 
-            <div class="body-stap" :class="{'active': store.utilitiesCounter >= 2}">
+            <div class="body-stap" :class="{'active': store.utilitiesCounter >= 2}" @click="store.changeUtilitiesCounter(2)">
                 <div class="body-stap__row">
                     <div class="body-stap__num">2</div>
                     <p class="body-stap__text">Propane Systems</p>
@@ -19,7 +19,7 @@
                 <div class="body-stap__down-line"></div>
             </div>
 
-            <div class="body-stap" :class="{'active': store.utilitiesCounter >= 3}">
+            <div class="body-stap" :class="{'active': store.utilitiesCounter >= 3}" @click="store.changeUtilitiesCounter(3)">
                 <div class="body-stap__row">
                     <div class="body-stap__num">3</div>
                     <p class="body-stap__text">Solar Power Options</p>
@@ -27,7 +27,7 @@
                 <div class="body-stap__down-line"></div>
             </div>
 
-            <div class="body-stap" :class="{'active': store.utilitiesCounter >= 4}">
+            <div class="body-stap" :class="{'active': store.utilitiesCounter >= 4}" @click="store.changeUtilitiesCounter(4)">
                 <div class="body-stap__row">
                     <div class="body-stap__num">4</div>
                     <p class="body-stap__text">Plumbing & Water</p>

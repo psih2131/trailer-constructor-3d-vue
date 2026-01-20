@@ -93,7 +93,7 @@ export const useCounterStore = defineStore('counter', () => {
       },
       'stap2': {
         'title': 'Ventilation & Climate',
-        'selectedElements': []
+        'selectedElementsArray': []
       },
       'stap3': {
         'title': 'Warming & Holding',
@@ -117,13 +117,18 @@ export const useCounterStore = defineStore('counter', () => {
       },
       'stap3': {
         'title': 'Exterior Add-ons',
-        'selectedElements': []
+        'selectedElementsArray': []
       },
       'stap4': {
         'title': 'Specialty & Marketing',
         'selectedElements': []
       },
     },
+  })
+
+  const fullyCustomData = ref<any>({
+    'description': null,
+    'files': null
   })
 
   function changeStapCounter(newValue: number) {
@@ -179,6 +184,7 @@ export const useCounterStore = defineStore('counter', () => {
     stapsMemory,
     popupCurrent,
     popupCloseAll,
+    fullyCustomData,
 
     changeStapCounter,
     changeFoundationCounter,

@@ -25,7 +25,7 @@
                         </p>
                     </div>
 
-                    <div class="selections__table-row">
+                    <div class="selections__table-row" v-if="store.dataServer.foundation.stap_2[+store.stapsMemory.stap1_Foundation.stap2.currentIndex].title_value != 'Fully Custom (Quoted Separately)'">
                         <p class="selections__table-name">
                             {{ store.stapsMemory.stap1_Foundation.stap2.title }}:
                         </p>
@@ -33,6 +33,21 @@
                             <span v-html="store.dataServer.foundation.stap_2[+store.stapsMemory.stap1_Foundation.stap2.currentIndex].title_value"></span>
                         </p>
                     </div>
+
+                    <div v-else class="selections__table-row selections__table-row--custom">
+                        <p class="selections__table-name">
+                            {{ store.stapsMemory.stap1_Foundation.stap2.title }}:
+                        </p>
+                        <p class="selections__table-value">
+                            <span v-html="store.dataServer.foundation.stap_2[+store.stapsMemory.stap1_Foundation.stap2.currentIndex].title_value"></span>
+                        </p>
+
+                        <p class="selections__text-config" 
+                        v-if="store.fullyCustomData?.description" 
+                        v-html="store.fullyCustomData.description"></p>
+                    </div>
+
+
 
                     <div class="selections__table-row">
                         <p class="selections__table-name">
@@ -93,15 +108,40 @@
                     </template>
 
                     <template v-for="(value, index) in store.stapsMemory.stap3_Equipment" :key="index">
-                        <div class="selections__table-row" v-for="item in value.selectedElements">
-                            <p class="selections__table-value" :data-price="item.priceValue">- {{ item.title}}</p>
-                        </div>
+                        <template v-if="value.selectedElementsArray">
+                
+                            <template v-for="clasterElement in value.selectedElementsArray">
+                                <div class="selections__table-row" v-for="item in clasterElement">
+                                    <p class="selections__table-value" :data-price="item.priceValue">- {{ item.title}}</p>
+                                </div>
+                            </template>
+                        </template>
+
+                        <template v-else>
+                            <div class="selections__table-row" v-for="item in value.selectedElements">
+                                <p class="selections__table-value"  :data-price="item.priceValue * (item.quantity > 0 ? item.quantity : 1)">
+                                    - {{ item.title}}<template v-if="item.quantity && item.quantity > 0"> ({{item.quantity}})</template>
+                                </p>
+                            </div>
+                        </template>
+                        
                     </template>
 
                     <template v-for="(value, index) in store.stapsMemory.stap4_AddOns" :key="index">
-                        <div class="selections__table-row" v-for="item in value.selectedElements">
-                            <p class="selections__table-value" :data-price="item.priceValue">- {{ item.title}}</p>
-                        </div>
+                        <template v-if="value.selectedElementsArray">
+                
+                            <template v-for="clasterElement in value.selectedElementsArray">
+                                <div class="selections__table-row" v-for="item in clasterElement">
+                                    <p class="selections__table-value" :data-price="item.priceValue">- {{ item.title}}</p>
+                                </div>
+                            </template>
+                        </template>
+
+                        <template v-else>
+                            <div class="selections__table-row" v-for="item in value.selectedElements">
+                                <p class="selections__table-value" :data-price="item.priceValue">- {{ item.title}}</p>
+                            </div>
+                        </template>
                     </template>
 
                 </div>
@@ -130,7 +170,7 @@
             <div class="order-form__down-controll">
     
                 <p class="order-form__down-controll-total-price">
-                    <!-- Toral price: <span>{{ Math.floor(totalPriceClient) }}$</span> -->
+                    Toral price: <span>{{ Math.floor(totalPriceClient) }}$</span>
                 </p>
               
 
@@ -266,7 +306,9 @@
     totalPriceClient.value = totalPrice.value * (1 + bysinessMarginProcent)
     totalPriceClient.value = Math.floor(totalPriceClient.value)
 
-
+    console.log('price UtilitiesPrice', UtilitiesPrice)
+    console.log('price EquipmentPrice', EquipmentPrice)
+    console.log('price AddOnPrice', AddOnPrice)
 
   }
 
@@ -294,11 +336,33 @@ function processEquipment() {
     Object.entries(equipment).forEach(([key, value]) => {
         console.log('Ключ объекта (аналог index):', key);
 
-        value.selectedElements.forEach(item => {
-         console.log('- priceValue ', item.priceValue);
+        if(value.selectedElements){
+            value.selectedElements.forEach(item => {
+            console.log('- priceValue ', item.priceValue);
+                if(item.quantity && item.quantity > 0){
+                    optionsPrice = +optionsPrice + (+item.priceValue * +item.quantity)
+                }
+                else{
+                    optionsPrice = +optionsPrice + +item.priceValue
+                }
+          
+            });
+        }
+        else if(value.selectedElementsArray){
+            value.selectedElementsArray.forEach(cluster =>{
+                cluster.forEach(clusterElement =>{
+                     console.log('- clusterElement', clusterElement.priceValue);
+                     
 
-            optionsPrice = +optionsPrice + +item.priceValue
-        });
+                    optionsPrice = +optionsPrice + +clusterElement.priceValue
+                })
+            })
+        }
+        else{
+
+        }
+
+        
     });
     return optionsPrice
 }
@@ -310,11 +374,27 @@ function processAddOns() {
     Object.entries(equipment).forEach(([key, value]) => {
         console.log('Ключ объекта (аналог index):', key);
 
-        value.selectedElements.forEach(item => {
-         console.log('- priceValue ', item.priceValue);
+        if(value.selectedElements){
+            value.selectedElements.forEach(item => {
+            console.log('- priceValue ', item.priceValue);
 
-            optionsPrice = +optionsPrice + +item.priceValue
-        });
+                optionsPrice = +optionsPrice + +item.priceValue
+            });
+        }
+        else if(value.selectedElementsArray){
+            value.selectedElementsArray.forEach(cluster =>{
+                cluster.forEach(clusterElement =>{
+                     console.log('- clusterElement', clusterElement.priceValue);
+
+                    optionsPrice = +optionsPrice + +clusterElement.priceValue
+                })
+            })
+        }
+        else{
+
+        }
+
+        
     });
     return optionsPrice
 }
@@ -388,6 +468,9 @@ ${store.stapsMemory.stap1_Foundation.stap5.title}: ${store.dataServer.foundation
 ${store.stapsMemory.stap1_Foundation.stap6.title}: ${store.dataServer.foundation.stap_6[+store.stapsMemory.stap1_Foundation.stap6.currentIndex].title_value} 
 ${store.stapsMemory.stap1_Foundation.stap7.title}: ${store.dataServer.foundation.stap_7[+store.stapsMemory.stap1_Foundation.stap7.currentIndex].title_value} - $${store.dataServer.foundation.stap_7[+store.stapsMemory.stap1_Foundation.stap7.currentIndex].price_value}
 
+${store.fullyCustomData?.description ? `Fully Custom (Quoted Separately)
+${store.fullyCustomData.description}`: ''}
+
 ${'⠀'}
 Equipment & Add-ons:
 `
@@ -397,7 +480,7 @@ let config2 = ""
 let allConfigTextElement = document.querySelectorAll('.eqyip-table .selections__table-value') 
 
 allConfigTextElement.forEach(element => {
-    let currentTitle = element.innerHTML
+    let currentTitle = element.textContent
     let priceCurrent = element.getAttribute('data-price')
     let valueConfigString = currentTitle + " - " + "$"+priceCurrent + "\n"
     config2 = config2 + valueConfigString
@@ -431,6 +514,15 @@ let rowX = `
     formData.append("business name", formBusinessName.value);
     formData.append("text description", formText.value);
     formData.append("config field",  config1Text +"\n" + config2 + rowX);
+
+    // file_814 — ИМЯ ПОЛЯ В CONTACT FORM 7
+    if(store.fullyCustomData?.files?.length > 0){
+        let files = store.fullyCustomData.files
+        files.forEach(item => {
+            formData.append("file-169 ", item.file);
+        });
+    }
+    
 
     submitToHubSpot(config1Text, config2)
     

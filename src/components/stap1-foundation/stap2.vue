@@ -17,6 +17,14 @@
             </template>
 
         </div>
+
+        <div class="fully-custom__form" v-if="store.stapsMemory.stap1_Foundation.stap2.titleValue == 'Fully Custom (Quoted Separately)'">
+            <div class="fully-custom__form-textarea">
+                <textarea placeholder="Enter your configuration here" v-model="store.fullyCustomData.description"></textarea>
+            </div>
+
+            <fileLoader @sendDataParent="fileSaveArray" />
+        </div>
     </div>
 </template>
 
@@ -27,6 +35,8 @@ import { useCounterStore } from '@/stores/counter'
 import { ref, onMounted, onBeforeUnmount, computed, watch , defineEmits } from 'vue'
 
 import modelViewer from '@/components/model-view.vue'
+
+import fileLoader from '@/components/fields/fileLoader.vue'
 
 
 
@@ -39,8 +49,16 @@ const sizeList = ref(null)
 
 const currentModel = ref(null)
 
+const fileArray = ref([])
+
 
 //METHODS
+function fileSaveArray(data){
+    fileArray.value = data
+    console.log(fileArray.value)
+    store.fullyCustomData.files = data
+}
+
 const selectCurrentSize = (item, index)=>{
     activeIndex.value = index
     // currentModel.value = item.model.url
