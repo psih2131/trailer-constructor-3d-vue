@@ -23,7 +23,7 @@
                 <textarea placeholder="Enter your configuration here" v-model="store.fullyCustomData.description"></textarea>
             </div>
 
-            <fileLoader @sendDataParent="fileSaveArray" />
+            <!-- <fileLoader @sendDataParent="fileSaveArray" /> -->
         </div>
     </div>
 </template>

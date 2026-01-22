@@ -56,17 +56,34 @@ const currentModel = ref(null)
 const selectCurrentSize = (item, index)=>{
 activeIndex.value = index
 
-// if(item.model?.url){
-// currentModel.value = item.model.url
-// }
-// else{
-// currentModel.value = trailerModel_7x12
-// }
-
 console.log(currentModel.value)
+
+let trailerStyleTitle = store.stapsMemory.stap1_Foundation.stap2.titleValue
+
+if(item.title_value == 'Gooseneck Upgrade'){
+
+    if(trailerStyleTitle == 'Airstream (Curved)'){
+        currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model_gooseneck_aerostream.url
+
+        console.log('currentModel.value', currentModel.value)
+    }
+    else{
+        currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model_gooseneck_.url
+    }
+    
+}
+else{
+   if(trailerStyleTitle == 'Airstream (Curved)'){
+        currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model_aerostream.url
+    }
+    else{
+        currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model.url
+    }
+}
 
 store.stapsMemory.stap1_Foundation.stap4.currentIndex = index
 store.stapsMemory.stap1_Foundation.stap4.priceValue = item.price_value
+store.stapsMemory.stap1_Foundation.stap4.titleValue = item.title_value
 
 console.log(store.stapsMemory)
 
@@ -80,24 +97,14 @@ onMounted(()=>{
 
     activeIndex.value = 0
     
-    // if(sizeList.value[0].model?.url){
-    //     currentModel.value = sizeList.value[0].model.url
-    // }
-    // else{
-    //     currentModel.value = trailerModel_7x12
-    // }
-
     if(store.stapsMemory.stap1_Foundation.stap4.currentIndex){
         let currentIndexSelect = +store.stapsMemory.stap1_Foundation.stap4.currentIndex
 
         activeIndex.value =  currentIndexSelect
 
-        // currentModel.value = sizeList.value[+currentIndexSelect].model.url
     }
     else{
         activeIndex.value = 0
-
-        // currentModel.value = sizeList.value[0].model.url
 
         store.stapsMemory.stap1_Foundation.stap4.currentIndex = 0
         
@@ -106,32 +113,45 @@ onMounted(()=>{
 
 
     //current model
-    //current model
     
     let trailerStyleTitle = store.stapsMemory.stap1_Foundation.stap2.titleValue
     let trailerPorchLength = store.stapsMemory.stap1_Foundation.stap3.titleValue
+    let trailerHitchType = store.stapsMemory.stap1_Foundation.stap4.titleValue
 
     console.log('trailerStyleTitle', trailerStyleTitle)
     console.log('trailerPorchLength', trailerPorchLength)
-    
-    if(trailerStyleTitle == 'Airstream (Curved)'){
-        if(trailerPorchLength != 'No Porch'){
-            currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model_aerostream_porch.url
+
+    if(trailerHitchType == 'Gooseneck Upgrade'){
+        if(trailerStyleTitle == 'Airstream (Curved)'){
+            currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model_gooseneck_aerostream.url
+
+            console.log('currentModel.value', currentModel.value)
         }
         else{
-            currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model_aerostream.url
+            currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model_gooseneck_.url
         }
-        
     }
     else{
-        if(trailerPorchLength != 'No Porch'){
-            currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model_porch.url
+        if(trailerStyleTitle == 'Airstream (Curved)'){
+            if(trailerPorchLength != 'No Porch'){
+                currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model_aerostream_porch.url
+            }
+            else{
+                currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model_aerostream.url
+            }
+            
         }
         else{
-            currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model.url
-        }
-      
-    }      
+            if(trailerPorchLength != 'No Porch'){
+                currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model_porch.url
+            }
+            else{
+                currentModel.value = store.dataServer.foundation.stap_1[+store.stapsMemory.stap1_Foundation.stap1.currentIndex].model.url
+            }
+        
+        } 
+    }
+         
 
 
    console.log(store.stapsMemory)
