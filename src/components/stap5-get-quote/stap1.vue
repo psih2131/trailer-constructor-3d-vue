@@ -153,9 +153,9 @@
 
             <div class="order-form__wrapper">
 
-                <inputComponent :placeholderField="'John'" :title="'First name *'" v-model="formFirstName" :inputType="'text'" :validStatus="formFirstNameValidStatus"/>
+                <inputComponent :placeholderField="'Enter your first name'" :title="'First name *'" v-model="formFirstName" :inputType="'text'" :validStatus="formFirstNameValidStatus"/>
 
-                <inputComponent :placeholderField="'Anderson'" :title="'Last Name *'" v-model="formLastName" :inputType="'text'" :validStatus="formLastNameValidStatus"/>
+                <inputComponent :placeholderField="'Enter your last name'" :title="'Last Name *'" v-model="formLastName" :inputType="'text'" :validStatus="formLastNameValidStatus"/>
 
                 <inputComponent :placeholderField="'email@domain.com'" :title="'Email Address *'" v-model="formEmail" :inputType="'email'" :validStatus="formEmailValidStatus"/>
 
@@ -170,7 +170,7 @@
             <div class="order-form__down-controll">
     
                 <p class="order-form__down-controll-total-price">
-                    Toral price: <span>{{ Math.floor(totalPriceClient) }}$</span>
+                    <!-- Toral price: <span>{{ Math.floor(totalPriceClient) }}$</span> -->
                 </p>
               
 

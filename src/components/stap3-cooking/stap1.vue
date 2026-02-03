@@ -113,10 +113,10 @@ const selectCurrentSize = (item, index) => {
     const selectedCount = sizeList.value.filter(el => el.selected).length
 
     // если элемент НЕ выбран и уже выбрано 3 — выходим
-    if (!sizeList.value[index].selected && selectedCount >= 3) {
-        console.warn('Можно выбрать максимум 3 элемента')
-        return
-    }
+    // if (!sizeList.value[index].selected && selectedCount >= 3) {
+    //     console.warn('Можно выбрать максимум 3 элемента')
+    //     return
+    // }
 
     activeIndex.value = index
     sizeList.value[index].selected = !sizeList.value[index].selected
