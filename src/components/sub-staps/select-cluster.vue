@@ -1,7 +1,7 @@
 <template>
     <template v-for="(item,index) in arrayData">
         <div class="trailer-size__choice-element choice-element choice-element--33" 
-        :class="{'active':item.selected == true}"
+        :class="{'active':item.selected == true, 'disable':item.disable}"
         @click="selectCurrentSize(item,index)"
         data-model="@/assets/models-3d/7x12_Square_Trailer.glb">
         
@@ -54,10 +54,15 @@ const props = defineProps({
     arrayData: Array,
     title_value: String,
 
-
     typeSelect: {
         type: String,
         default: 'one'
+    },
+
+    // если true — всегда должен быть выбран хотя бы один элемент (для typeSelect === 'one')
+    noEmptyValue: {
+        type: Boolean,
+        default: false
     }
 })
 
@@ -108,7 +113,9 @@ function changeCounter(event,item,index){
                 'currentIndex': +i,
                 'priceValue': arraySizeList[i].price_value,
                 'title': arraySizeList[i].title_value,
-                'quantity': +value
+                'quantity': +value,
+                'size_ft': arraySizeList[i].size_ft ?? null,
+                'size_in': arraySizeList[i].in ?? null,
             }
             valueStoreArray.push(object)
         }
@@ -120,12 +127,18 @@ function changeCounter(event,item,index){
 }
 
 
-
-
 const selectCurrentSize = (item, index)=>{
+
+    if(item.disable) return
 
     if(props.typeSelect == 'one'){
         activeIndex.value = index
+
+        // если нельзя оставлять пустое значение и элемент уже выбран,
+        // то не даём снять галочку (можно только переключаться на другой элемент)
+        if (props.noEmptyValue && arrayListObject.value[index].selected) {
+            return
+        }
 
         arrayListObject.value[index].selected = !arrayListObject.value[index].selected
 
@@ -145,7 +158,9 @@ const selectCurrentSize = (item, index)=>{
                 'currentIndex': +index,
                 'priceValue': item.price_value,
                 'title': item.title_value,
-                'quantity': 1
+                'quantity': 1,
+                'size_ft': item.size_ft ?? null,
+                'size_in': item.in ?? null,
 
             }
             valueStoreArray.push(object)
@@ -169,8 +184,9 @@ const selectCurrentSize = (item, index)=>{
                     'currentIndex': +i,
                     'priceValue': arraySizeList[i].price_value,
                     'title': arraySizeList[i].title_value,
-                    'quantity': 1
-                
+                    'quantity': 1,
+                    'size_ft': arraySizeList[i].size_ft ?? null,
+                    'size_in': arraySizeList[i].in ?? null,
 
                 }
                 valueStoreArray.push(object)

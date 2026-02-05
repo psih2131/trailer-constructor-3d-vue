@@ -173,11 +173,27 @@ function changeSelectedData(data, index){
 
      store.stapsMemory.stap3_Equipment.stap1.selectedElementsArray[index] = data
      console.log(store.stapsMemory)
+
+
+        if(store.stapsMemory.stap3_Equipment.stap2.selectedElementsArray.length > 0){
+
+            store.stapsMemory.stap3_Equipment.stap2.selectedElementsArray[0] = []
+
+        }
+        else{
+
+        }
 }
 
 
 //HOOKS
 onMounted(()=>{
+ 
+
+
+
+
+
 
     selectedElementsArray.value =  store.stapsMemory.stap3_Equipment.stap1.selectedElementsArray
 

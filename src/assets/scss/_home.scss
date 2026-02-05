@@ -421,6 +421,15 @@
         background: rgba(93, 63, 211, 0.15);
         transition: all ease 0.3s;
     }
+
+    &.disable {
+        cursor: default;
+        opacity: 0.4;
+
+        &:hover {
+            transform: scale(1);
+        }
+    }
 }
 
 .choice-element__data {
