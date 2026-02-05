@@ -1,11 +1,24 @@
 <template>
-    <div class="body-main-data__wrapper" v-if="store.dataServer.equipment?.stap_1?.length >0">
+    <div class="body-main-data__wrapper" v-if="store.dataServer.equipment?.stap_1_claster?.length > 0">
 
         <modelViewer :urlModel="currentModel" />
 
         <div class="trailer-size">
 
-            <template v-for="(item,index) in sizeList">
+            <template v-if="clasterList?.length > 0">
+
+                <template v-for="(item,index) in clasterList">
+                    <selectCluster  
+                    :arrayData="item.claster" 
+                    :titleClaster="item.title_value" 
+                    :typeSelect="typeSelect(item.claster_title)"
+
+                    @selectedArray="changeSelectedData($event,index)" />
+                </template>
+                
+            </template>
+
+            <!-- <template v-for="(item,index) in sizeList">
                 <div class="trailer-size__choice-element choice-element choice-element--33" 
                 :class="{'active':item.selected == true}"
                 @click="selectCurrentSize(item,index)"
@@ -50,7 +63,7 @@
                     </div>
 
                 </div>
-            </template>
+            </template> -->
 
         </div>
     </div>
@@ -63,7 +76,7 @@ import { ref, onMounted, onBeforeUnmount, computed, watch , defineEmits } from '
 
 import modelViewer from '@/components/model-view.vue'
 
-import trailerModel_7x12 from '@/assets/models/models-3d/7x12_Square_Trailer.glb?url';
+import selectCluster from '@/components/sub-staps/select-cluster.vue'
 
 
 //DATA
@@ -73,7 +86,11 @@ const activeIndex = ref(null)
 
 const sizeList = ref(null)
 
+const clasterList = ref(null)
+
 const currentModel = ref(null)
+
+const selectedElementsArray =  ref(null)
 
 const onInput = (e, maxValue) => {
   let value = e.target.value
@@ -112,12 +129,6 @@ function changeCounter(event,item,index){
 const selectCurrentSize = (item, index) => {
     const selectedCount = sizeList.value.filter(el => el.selected).length
 
-    // если элемент НЕ выбран и уже выбрано 3 — выходим
-    // if (!sizeList.value[index].selected && selectedCount >= 3) {
-    //     console.warn('Можно выбрать максимум 3 элемента')
-    //     return
-    // }
-
     activeIndex.value = index
     sizeList.value[index].selected = !sizeList.value[index].selected
 
@@ -135,39 +146,132 @@ const selectCurrentSize = (item, index) => {
 
 
 
+
+
+
+
+
+
+
+function typeSelect(data){
+
+    console.log(data)
+    let tupeSelectValue
+    if(data == 'other ventilation options' || data == 'other options'){
+        tupeSelectValue = 'many'
+    }
+    else{
+        tupeSelectValue = 'one'
+    }
+
+    return tupeSelectValue
+}
+
+
+function changeSelectedData(data, index){
+    console.log(changeSelectedData,data, index)
+
+     store.stapsMemory.stap3_Equipment.stap1.selectedElementsArray[index] = data
+     console.log(store.stapsMemory)
+}
+
+
 //HOOKS
 onMounted(()=>{
 
-    sizeList.value = store.dataServer.equipment.stap_1
+    selectedElementsArray.value =  store.stapsMemory.stap3_Equipment.stap1.selectedElementsArray
 
-    sizeList.value.forEach(item => {
-        item.selected = false
-        item.quantity = 0
+    clasterList.value = store.dataServer.equipment.stap_1_claster
+    clasterList.value.forEach(item =>{
+        item.claster.forEach(element =>{
+            element.selected = false
+            element.quantity = 1
+        })
     })
 
-    activeIndex.value = 0
-    
-    // if(sizeList.value[0].model?.url){
-    //     currentModel.value = sizeList.value[0].model.url
-    // }
-    // else{
-    //     currentModel.value = trailerModel_7x12
-    // }
+    console.log('clasterList', clasterList.value)
 
 
-    if(store.stapsMemory.stap3_Equipment.stap1.selectedElements.length > 0){
+    if(store.stapsMemory.stap3_Equipment.stap1.selectedElementsArray.length > 0){
+        //если это не первая загрузка шага и там уже есть масив с кластеров пустой или выбраными элементами
+        let storeSelectedArrays = store.stapsMemory.stap3_Equipment.stap1.selectedElementsArray
 
-        let arraySelectedListStore = store.stapsMemory.stap3_Equipment.stap1.selectedElements
 
-        for(let i = 0; i < arraySelectedListStore.length; i++){
-            let indexCurrent = +arraySelectedListStore[i].currentIndex
-            sizeList.value[indexCurrent].selected = true
-            sizeList.value[indexCurrent].quantity = +arraySelectedListStore[i].quantity || 0
+        //прогоняем через цыкл кластеры
+        for(let i = 0; i < storeSelectedArrays.length; i++){
+
+            let arraySelectedListStore = storeSelectedArrays[i]
+
+            //каждый кластер прверяем на наличие элементов
+            if(arraySelectedListStore.length > 0){
+                //если он не пустой то тогда передаем в копоненты выбраные элементы
+                for(let x = 0; x < arraySelectedListStore.length; x++){
+                let indexCurrent = +arraySelectedListStore[x].currentIndex
+                console.log(clasterList.value[i], indexCurrent)
+                clasterList.value[i].claster[indexCurrent].selected = true
+                clasterList.value[i].claster[indexCurrent].quantity = +arraySelectedListStore[x].quantity || 0
+            }
+
+            }
+            else{
+                clasterList.value[i]
+                store.stapsMemory.stap3_Equipment.stap1.selectedElementsArray[i] = []
+            }
         }
+
     }
     else{
-        store.stapsMemory.stap3_Equipment.stap1.selectedElements = []
+        //если это первая загрузка этого шага и еще ничего не выбрано то мы 
+        // создаем пустые масивы в сторе для этого шага в зависимости от количества кластеров заполненых в админке
+        let arraysServerCluster = store.dataServer.equipment.stap_1_claster
+        let emptyArrayStore = []
+        for(let i = 0; i < arraysServerCluster.length; i++){
+            let newArrayCreate = []
+            emptyArrayStore.push(newArrayCreate)
+        }
+        
+        store.stapsMemory.stap3_Equipment.stap1.selectedElementsArray = emptyArrayStore
+
+       
     }
+    console.log(store.stapsMemory.stap3_Equipment.stap1)
+
+
+
+
+
+    // sizeList.value = store.dataServer.equipment.stap_1
+
+    // sizeList.value.forEach(item => {
+    //     item.selected = false
+    //     item.quantity = 0
+    // })
+
+    // activeIndex.value = 0
+    
+
+    // if(store.stapsMemory.stap3_Equipment.stap1.selectedElements.length > 0){
+
+    //     let arraySelectedListStore = store.stapsMemory.stap3_Equipment.stap1.selectedElements
+
+    //     for(let i = 0; i < arraySelectedListStore.length; i++){
+    //         let indexCurrent = +arraySelectedListStore[i].currentIndex
+    //         sizeList.value[indexCurrent].selected = true
+    //         sizeList.value[indexCurrent].quantity = +arraySelectedListStore[i].quantity || 0
+    //     }
+    // }
+    // else{
+    //     store.stapsMemory.stap3_Equipment.stap1.selectedElements = []
+    // }
+
+
+
+
+
+
+
+
+
 
     //current model
     

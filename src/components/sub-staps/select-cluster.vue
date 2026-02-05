@@ -22,6 +22,21 @@
             <div class="choice-element__data">
                 <p class="trailer-size__element-title trailer-size__element-title-smaller">{{ item.title_value }}</p>
                 <p class="trailer-size__element-subtitle">{{ item.subtitle }}</p>
+
+                <div class="choice-element__count" v-if="item.counter && +item.counter != 0 && item.selected == true" >
+                    <p class="choice-element__count-text">Quantity</p>
+                    <input  type="number"
+                    class="choice-element__count-field"
+                    min="1"
+                    step="1"
+                    :value="+item.quantity"
+                    inputmode="numeric"
+                    pattern="[0-9]*"
+                    @click.stop
+                    @input="onInput($event, +item.counter),changeCounter($event,item,index)">
+            
+                </div>
+
                 <p class="trailer-size__element-cost">{{ item.price }}</p>
             </div>
 
@@ -30,23 +45,82 @@
 </template>
 
 <script setup>
-    //  import { useCounterStore } from '@/stores/counter'
+
+import { useCounterStore } from '@/stores/counter'
+
 import { ref, onMounted, onBeforeUnmount, computed, watch , defineEmits } from 'vue'
 
 const props = defineProps({
     arrayData: Array,
     title_value: String,
+
+
     typeSelect: {
         type: String,
         default: 'one'
     }
 })
 
+const store = useCounterStore()
+
 const emit = defineEmits(['selectedArray'])
 
 const arrayListObject = ref(null)
 
 const activeIndex = ref(null)
+
+
+const onInput = (e, maxValue) => {
+  let value = e.target.value
+
+  // оставляем только цифры
+  value = value.replace(/\D+/g, '')
+
+  // если пусто — ставим 1
+  if (!value) {
+    value = '1'
+  }
+
+  let number = Number(value)
+
+  // минимальное значение
+  if (number < 1) number = 1
+
+  // максимальное значение
+  if (number > maxValue) number = maxValue
+
+  e.target.value = number
+}
+
+
+
+
+function changeCounter(event,item,index){
+    let value = event.target.value
+
+    let arraySizeList = arrayListObject.value
+    let valueStoreArray = []
+
+    for(let i = 0; i < arraySizeList.length; i++){
+
+        if(arraySizeList[i].selected == true){
+            let object = {
+                'currentIndex': +i,
+                'priceValue': arraySizeList[i].price_value,
+                'title': arraySizeList[i].title_value,
+                'quantity': +value
+            }
+            valueStoreArray.push(object)
+        }
+    } 
+
+    console.log('valueStoreArray', valueStoreArray, props.typeSelect )
+    emit('selectedArray',valueStoreArray)
+
+}
+
+
+
 
 const selectCurrentSize = (item, index)=>{
 
@@ -70,7 +144,8 @@ const selectCurrentSize = (item, index)=>{
             let object = {
                 'currentIndex': +index,
                 'priceValue': item.price_value,
-                'title': item.title_value
+                'title': item.title_value,
+                'quantity': 1
 
             }
             valueStoreArray.push(object)
@@ -93,7 +168,9 @@ const selectCurrentSize = (item, index)=>{
                 let object = {
                     'currentIndex': +i,
                     'priceValue': arraySizeList[i].price_value,
-                    'title': arraySizeList[i].title_value
+                    'title': arraySizeList[i].title_value,
+                    'quantity': 1
+                
 
                 }
                 valueStoreArray.push(object)
@@ -106,6 +183,8 @@ const selectCurrentSize = (item, index)=>{
     }
 
 }
+
+
 
 onMounted(()=>{
     arrayListObject.value = props.arrayData

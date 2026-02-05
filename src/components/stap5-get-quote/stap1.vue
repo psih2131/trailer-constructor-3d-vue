@@ -112,9 +112,15 @@
                 
                             <template v-for="clasterElement in value.selectedElementsArray">
                                 <div class="selections__table-row" v-for="item in clasterElement">
-                                    <p class="selections__table-value" :data-price="item.priceValue">- {{ item.title}}</p>
+                                    <!-- <p class="selections__table-value" :data-price="item.priceValue">- {{ item.title}}</p> -->
+
+                                    <p class="selections__table-value"  :data-price="item.priceValue * (item.quantity > 0 ? item.quantity : 1)">
+                                    - {{ item.title}}<template v-if="item.quantity && item.quantity > 0"> ({{item.quantity}})</template>
+                                </p>
+
                                 </div>
                             </template>
+
                         </template>
 
                         <template v-else>
@@ -170,7 +176,7 @@
             <div class="order-form__down-controll">
     
                 <p class="order-form__down-controll-total-price">
-                    <!-- Toral price: <span>{{ Math.floor(totalPriceClient) }}$</span> -->
+                    Toral price: <span>{{ Math.floor(totalPriceClient) }}$</span>
                 </p>
               
 
@@ -333,35 +339,39 @@ function processEquipment() {
     let optionsPrice = 0
     const equipment = store.stapsMemory.stap3_Equipment;
 
-    Object.entries(equipment).forEach(([key, value]) => {
-        console.log('Ключ объекта (аналог index):', key);
+    Object.entries(equipment).forEach(([key, value]) => { 
+        console.log('Ключ объекта (аналог index):', key, value);
 
-        if(value.selectedElements){
+
+        if(value.selectedElements?.length > 0){
             value.selectedElements.forEach(item => {
             console.log('- priceValue ', item.priceValue);
+
                 if(item.quantity && item.quantity > 0){
                     optionsPrice = +optionsPrice + (+item.priceValue * +item.quantity)
                 }
                 else{
                     optionsPrice = +optionsPrice + +item.priceValue
                 }
-          
             });
         }
-        else if(value.selectedElementsArray){
+        else if(value.selectedElementsArray?.length > 0){
             value.selectedElementsArray.forEach(cluster =>{
                 cluster.forEach(clusterElement =>{
                      console.log('- clusterElement', clusterElement.priceValue);
-                     
 
-                    optionsPrice = +optionsPrice + +clusterElement.priceValue
+                    if(clusterElement.quantity && clusterElement.quantity > 0){
+                        optionsPrice = +optionsPrice + (+clusterElement.priceValue * +clusterElement.quantity)
+                    }
+                    else{
+                        optionsPrice = +optionsPrice + +clusterElement.priceValue
+                    }
                 })
             })
         }
         else{
 
         }
-
         
     });
     return optionsPrice
@@ -374,14 +384,14 @@ function processAddOns() {
     Object.entries(equipment).forEach(([key, value]) => {
         console.log('Ключ объекта (аналог index):', key);
 
-        if(value.selectedElements){
+        if(value.selectedElements?.length > 0){
             value.selectedElements.forEach(item => {
             console.log('- priceValue ', item.priceValue);
 
                 optionsPrice = +optionsPrice + +item.priceValue
             });
         }
-        else if(value.selectedElementsArray){
+        else if(value.selectedElementsArray?.length > 0){
             value.selectedElementsArray.forEach(cluster =>{
                 cluster.forEach(clusterElement =>{
                      console.log('- clusterElement', clusterElement.priceValue);

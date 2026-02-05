@@ -89,7 +89,8 @@ export const useCounterStore = defineStore('counter', () => {
     'stap3_Equipment': {
       'stap1': {
         'title': 'Cooking Equipment',
-        'selectedElements': []
+        'selectedElements': [],
+        'selectedElementsArray': []
       },
       'stap2': {
         'title': 'Ventilation & Climate',
