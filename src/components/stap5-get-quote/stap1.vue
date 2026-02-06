@@ -176,7 +176,7 @@
             <div class="order-form__down-controll">
     
                 <p class="order-form__down-controll-total-price">
-                    Toral price: <span>{{ Math.floor(totalPriceClient) }}$</span>
+                    <!-- Toral price: <span>{{ Math.floor(totalPriceClient) }}$</span> -->
                 </p>
               
 
@@ -505,10 +505,18 @@ let rowX = `
     let formData = new FormData();
 
     // скрытые поля
-    formData.append("_wpcf7", "319");
+
+    // formData.append("_wpcf7", "319");
+    // formData.append("_wpcf7_version", "6.1.4");
+    // formData.append("_wpcf7_locale", "en_US");
+    // formData.append("_wpcf7_unit_tag", "wpcf7-f319-o2");
+    // formData.append("_wpcf7_container_post", "0");
+    // formData.append("_wpcf7_posted_data_hash", "");
+
+    formData.append("_wpcf7", "11554");
     formData.append("_wpcf7_version", "6.1.4");
     formData.append("_wpcf7_locale", "en_US");
-    formData.append("_wpcf7_unit_tag", "wpcf7-f319-o2");
+    formData.append("_wpcf7_unit_tag", "wpcf7-11554-o2");
     formData.append("_wpcf7_container_post", "0");
     formData.append("_wpcf7_posted_data_hash", "");
 
@@ -536,8 +544,8 @@ let rowX = `
 
     submitToHubSpot(config1Text, config2)
     
-
-    fetch("https://stcroixtrailers.theprojectview.com/wp-json/contact-form-7/v1/contact-forms/319/feedback", {
+    // https://stcroixtrailers.theprojectview.com/wp-json/contact-form-7/v1/contact-forms/319/feedback
+    fetch("https://stcroixtrailers.com/wp-json/contact-form-7/v1/contact-forms/11554/feedback", {
         method: "POST",
    
         body: formData
