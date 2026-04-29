@@ -1,4 +1,5 @@
 <template>
+   <FormSubmitPreloader :visible="showSubmitPreloader" />
    <div class="get-quote__container" v-if="store?.stapsMemory">
     <div class="get-quote__header">
         <div class="get-quote__header-icon">
@@ -99,58 +100,52 @@
 
             <div class="selections__table-wrapper eqyip-table" >
                 <p class="selections__table-title">Equipment & Add-ons:</p>
-                <div class="selections__table selections__table2">
+                <div class="selections__table selections__table2" v-if="hasEquipmentOrAddonsSelections">
                     
-                    <template v-for="(value, index) in store.stapsMemory.stap2_Utilities" :key="index">
-                        <div class="selections__table-row" v-for="item in value.selectedElements">
-                            <p class="selections__table-value" :data-price="item.priceValue">- {{ item.title}}</p>
+                    <template v-for="(value, index) in store.stapsMemory.stap2_Utilities" :key="'util-' + index">
+                        <div class="selections__table-row" v-for="item in (value.selectedElements || [])" :key="item?.currentIndex ?? index">
+                            <p class="selections__table-value" v-if="item" :data-price="item.priceValue">- {{ item.title }}</p>
                         </div>
                     </template>
 
-                    <template v-for="(value, index) in store.stapsMemory.stap3_Equipment" :key="index">
-                        <template v-if="value.selectedElementsArray">
-                
-                            <template v-for="clasterElement in value.selectedElementsArray">
-                                <div class="selections__table-row" v-for="item in clasterElement">
-                                    <!-- <p class="selections__table-value" :data-price="item.priceValue">- {{ item.title}}</p> -->
-
-                                    <p class="selections__table-value"  :data-price="item.priceValue * (item.quantity > 0 ? item.quantity : 1)">
-                                    - {{ item.title}}<template v-if="item.quantity && item.quantity > 0"> ({{item.quantity}})</template>
-                                </p>
-
+                    <template v-for="(value, index) in store.stapsMemory.stap3_Equipment" :key="'equip-' + index">
+                        <template v-if="value.selectedElementsArray?.length">
+                            <template v-for="(clasterElement, ci) in value.selectedElementsArray" :key="'c-' + ci">
+                                <div class="selections__table-row" v-for="(item, ii) in (Array.isArray(clasterElement) ? clasterElement : [])" :key="ii">
+                                    <p class="selections__table-value" v-if="item" :data-price="item.priceValue * (item.quantity > 0 ? item.quantity : 1)">
+                                        - {{ item.title }}<template v-if="item.quantity && item.quantity > 0"> ({{ item.quantity }})</template>
+                                    </p>
                                 </div>
                             </template>
-
                         </template>
 
-                        <template v-else>
-                            <div class="selections__table-row" v-for="item in value.selectedElements">
-                                <p class="selections__table-value"  :data-price="item.priceValue * (item.quantity > 0 ? item.quantity : 1)">
-                                    - {{ item.title}}<template v-if="item.quantity && item.quantity > 0"> ({{item.quantity}})</template>
+                        <template v-else-if="value.selectedElements?.length">
+                            <div class="selections__table-row" v-for="(item, ii) in value.selectedElements" :key="ii">
+                                <p class="selections__table-value" v-if="item" :data-price="item.priceValue * (item.quantity > 0 ? item.quantity : 1)">
+                                    - {{ item.title }}<template v-if="item.quantity && item.quantity > 0"> ({{ item.quantity }})</template>
                                 </p>
                             </div>
                         </template>
-                        
                     </template>
 
-                    <template v-for="(value, index) in store.stapsMemory.stap4_AddOns" :key="index">
-                        <template v-if="value.selectedElementsArray">
-                
-                            <template v-for="clasterElement in value.selectedElementsArray">
-                                <div class="selections__table-row" v-for="item in clasterElement">
-                                    <p class="selections__table-value" :data-price="item.priceValue">- {{ item.title}}</p>
+                    <template v-for="(value, index) in store.stapsMemory.stap4_AddOns" :key="'addon-' + index">
+                        <template v-if="value.selectedElementsArray?.length">
+                            <template v-for="(clasterElement, ci) in value.selectedElementsArray" :key="'c-' + ci">
+                                <div class="selections__table-row" v-for="(item, ii) in (Array.isArray(clasterElement) ? clasterElement : [])" :key="ii">
+                                    <p class="selections__table-value" v-if="item" :data-price="item.priceValue">- {{ item.title }}</p>
                                 </div>
                             </template>
                         </template>
 
-                        <template v-else>
-                            <div class="selections__table-row" v-for="item in value.selectedElements">
-                                <p class="selections__table-value" :data-price="item.priceValue">- {{ item.title}}</p>
+                        <template v-else-if="value.selectedElements?.length">
+                            <div class="selections__table-row" v-for="(item, ii) in value.selectedElements" :key="ii">
+                                <p class="selections__table-value" v-if="item" :data-price="item.priceValue">- {{ item.title }}</p>
                             </div>
                         </template>
                     </template>
 
                 </div>
+                <p v-else class="selections__table-empty">No equipment or add-ons selected</p>
             </div>
 
         </div>
@@ -221,6 +216,7 @@
   import { ref, onMounted, onBeforeUnmount, computed, watch , defineEmits } from 'vue'
   
   import inputComponent from '@/components/fields/inputComponent.vue'
+  import FormSubmitPreloader from '@/components/stap5-get-quote/FormSubmitPreloader.vue'
 
   import { useCounterStore } from '@/stores/counter'
 
@@ -262,10 +258,29 @@
 
   const validFormStatus = ref(null)
 
+  const showSubmitPreloader = ref(false)
+
   function getCurrentFoundationValue(index){
     return index
   }
 
+  const hasEquipmentOrAddonsSelections = computed(() => {
+    const checkItems = (obj, useArray = false) => {
+      return Object.values(obj).some(v => {
+        if (useArray && Array.isArray(v?.selectedElementsArray)) {
+          return v.selectedElementsArray.some(cluster =>
+            Array.isArray(cluster) && cluster.length > 0
+          )
+        }
+        return Array.isArray(v?.selectedElements) && v.selectedElements.length > 0
+      })
+    }
+    return checkItems(store.stapsMemory.stap2_Utilities) ||
+      checkItems(store.stapsMemory.stap3_Equipment, true) ||
+      checkItems(store.stapsMemory.stap3_Equipment) ||
+      checkItems(store.stapsMemory.stap4_AddOns, true) ||
+      checkItems(store.stapsMemory.stap4_AddOns)
+  })
 
   const calcGlobalCost = () =>{
 
@@ -324,11 +339,11 @@ function processUtilities() {
     const equipment = store.stapsMemory.stap2_Utilities;
 
     Object.entries(equipment).forEach(([key, value]) => {
-        console.log('Ключ объекта (аналог index):', key);
-
-        value.selectedElements.forEach(item => {
-        console.log('- priceValue ', item.priceValue);
-        optionsPrice = +optionsPrice + +item.priceValue
+        const items = Array.isArray(value?.selectedElements) ? value.selectedElements : [];
+        items.forEach(item => {
+            if (item?.priceValue != null && !isNaN(+item.priceValue)) {
+                optionsPrice += +item.priceValue;
+            }
         });
     });
     return optionsPrice
@@ -339,40 +354,28 @@ function processEquipment() {
     let optionsPrice = 0
     const equipment = store.stapsMemory.stap3_Equipment;
 
-    Object.entries(equipment).forEach(([key, value]) => { 
-        console.log('Ключ объекта (аналог index):', key, value);
-
-
-        if(value.selectedElements?.length > 0){
-            value.selectedElements.forEach(item => {
-            console.log('- priceValue ', item.priceValue);
-
-                if(item.quantity && item.quantity > 0){
-                    optionsPrice = +optionsPrice + (+item.priceValue * +item.quantity)
-                }
-                else{
-                    optionsPrice = +optionsPrice + +item.priceValue
-                }
+    Object.entries(equipment).forEach(([key, value]) => {
+        const items = Array.isArray(value?.selectedElements) ? value.selectedElements : [];
+        if (items.length > 0) {
+            items.forEach(item => {
+                const price = item?.priceValue != null && !isNaN(+item.priceValue) ? +item.priceValue : 0;
+                const qty = (item?.quantity != null && !isNaN(+item.quantity) && +item.quantity > 0) ? +item.quantity : 1;
+                optionsPrice += price * qty;
             });
+            return;
         }
-        else if(value.selectedElementsArray?.length > 0){
-            value.selectedElementsArray.forEach(cluster =>{
-                cluster.forEach(clusterElement =>{
-                     console.log('- clusterElement', clusterElement.priceValue);
-
-                    if(clusterElement.quantity && clusterElement.quantity > 0){
-                        optionsPrice = +optionsPrice + (+clusterElement.priceValue * +clusterElement.quantity)
-                    }
-                    else{
-                        optionsPrice = +optionsPrice + +clusterElement.priceValue
-                    }
-                })
-            })
-        }
-        else{
-
-        }
-        
+        const clusters = Array.isArray(value?.selectedElementsArray) ? value.selectedElementsArray : [];
+        if (clusters.length === 0) return;
+        clusters.forEach(cluster => {
+            const elements = Array.isArray(cluster) ? cluster : (cluster ? [cluster] : []);
+            elements.forEach(clusterElement => {
+                if (!clusterElement || clusterElement.priceValue == null || isNaN(+clusterElement.priceValue)) return;
+                const price = +clusterElement.priceValue;
+                const qty = (clusterElement.quantity != null && !isNaN(+clusterElement.quantity) && +clusterElement.quantity > 0)
+                    ? +clusterElement.quantity : 1;
+                optionsPrice += price * qty;
+            });
+        });
     });
     return optionsPrice
 }
@@ -382,29 +385,24 @@ function processAddOns() {
     const equipment = store.stapsMemory.stap4_AddOns;
 
     Object.entries(equipment).forEach(([key, value]) => {
-        console.log('Ключ объекта (аналог index):', key);
-
-        if(value.selectedElements?.length > 0){
-            value.selectedElements.forEach(item => {
-            console.log('- priceValue ', item.priceValue);
-
-                optionsPrice = +optionsPrice + +item.priceValue
+        const items = Array.isArray(value?.selectedElements) ? value.selectedElements : [];
+        if (items.length > 0) {
+            items.forEach(item => {
+                if (item?.priceValue != null && !isNaN(+item.priceValue)) {
+                    optionsPrice += +item.priceValue;
+                }
             });
+            return;
         }
-        else if(value.selectedElementsArray?.length > 0){
-            value.selectedElementsArray.forEach(cluster =>{
-                cluster.forEach(clusterElement =>{
-                     console.log('- clusterElement', clusterElement.priceValue);
-
-                    optionsPrice = +optionsPrice + +clusterElement.priceValue
-                })
-            })
-        }
-        else{
-
-        }
-
-        
+        const clusters = Array.isArray(value?.selectedElementsArray) ? value.selectedElementsArray : [];
+        if (clusters.length === 0) return;
+        clusters.forEach(cluster => {
+            const elements = Array.isArray(cluster) ? cluster : (cluster ? [cluster] : []);
+            elements.forEach(clusterElement => {
+                if (!clusterElement || clusterElement.priceValue == null || isNaN(+clusterElement.priceValue)) return;
+                optionsPrice += +clusterElement.priceValue;
+            });
+        });
     });
     return optionsPrice
 }
@@ -466,6 +464,7 @@ function validEmail(email) {
 
 
 function sendForm() {
+  showSubmitPreloader.value = true
 let config1Text = ` 
 ${'⠀'}
 Trailer info:
@@ -541,7 +540,7 @@ let rowX = `
         });
     }
     
-
+    
     submitToHubSpot(config1Text, config2)
     
     // https://stcroixtrailers.theprojectview.com/wp-json/contact-form-7/v1/contact-forms/319/feedback
@@ -572,6 +571,9 @@ let rowX = `
     .catch(err => {
         alert(err)
         console.error(err)
+    })
+    .finally(() => {
+      showSubmitPreloader.value = false
     });
 
 
